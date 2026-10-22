@@ -31,7 +31,7 @@ export interface Profile {
 }
 
 export interface SessionDraft {
-  step: number;
+  step: string;
   mode: "quick" | "full";
   reflection: string;
   followUp: string;
