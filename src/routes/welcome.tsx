@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { modules, moduleById, type ModuleId } from "@/content/curriculum";
 import {
   changeOptions, wantOptions, momentOptions, responseOptions, strengthStarters,
   recommendFocus, explainFocus, nextSession,
 } from "@/lib/recommend";
-import { useApp, localDate, uid, type Profile, type Rhythm } from "@/lib/store";
+import { useApp, localDate, type Profile, type Rhythm } from "@/lib/store";
 
 export const Route = createFileRoute("/welcome")({
   head: () => ({
@@ -117,7 +117,7 @@ function Welcome() {
     );
   }
 
-  const steps: Record<number, { q: string; body: React.ReactNode; note?: string }> = {
+  const steps: Record<number, { q: string; body: ReactNode; note?: string }> = {
     1: {
       q: "What kind of change are you navigating?",
       note: "Choose any that apply.",
@@ -231,7 +231,7 @@ function Welcome() {
   );
 }
 
-function Frame({ children }: { children: React.ReactNode }) {
+function Frame({ children }: { children: ReactNode }) {
   return <main className="mx-auto min-h-screen max-w-xl px-5 py-10 md:py-16">{children}</main>;
 }
 
@@ -254,4 +254,4 @@ function Choices({ options, selected, onToggle, max }: { options: { id: string; 
   );
 }
 
-export { uid };
+
