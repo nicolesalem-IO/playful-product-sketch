@@ -48,7 +48,7 @@ export interface PlannedAction {
 
 export interface Evidence {
   id: string; title: string; content: string; category: EvidenceCategory;
-  date: string; sessionId?: string; favorite: boolean;
+  date: string; sessionId?: string | undefined; favorite: boolean;
 }
 
 export interface WeeklyReflection { id: string; date: string; answers: Record<string, string> }

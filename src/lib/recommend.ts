@@ -1,4 +1,4 @@
-import { modules, sessions, sessionsInModule, type ModuleId, type Upcoming } from "@/content/curriculum";
+import { modules, sessions, sessionsInModule, type ModuleId, type Session, type Upcoming } from "@/content/curriculum";
 
 export const changeOptions = [
   { id: "returning", label: "Returning to work after time away" },
@@ -87,14 +87,14 @@ export function explainFocus(focus: ModuleId, sel: Selections): string {
 }
 
 /** First incomplete session in the focus module, then following modules in order. */
-export function nextSession(focus: ModuleId, completed: string[]) {
+export function nextSession(focus: ModuleId, completed: string[]): Session {
   const start = modules.findIndex((m) => m.id === focus);
   for (let i = 0; i < modules.length; i++) {
-    const mod = modules[(start + i) % modules.length];
+    const mod = modules[(start + i) % modules.length]!;
     const s = sessionsInModule(mod.id).find((x) => !completed.includes(x.id));
     if (s) return s;
   }
-  return sessionsInModule(focus)[0];
+  return sessionsInModule(focus)[0] ?? sessions[0]!;
 }
 
 export function suggestForUpcoming(up: Upcoming, completed: string[], limit = 3) {

@@ -70,8 +70,8 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
   const idx = Math.max(0, steps.indexOf(d.step));
   const set = (patch: Partial<SessionDraft>) => setD((prev) => ({ ...prev, ...patch }));
   const goto = (step: string) => { set({ step }); setTimeout(() => headingRef.current?.focus(), 0); };
-  const next = () => goto(steps[idx + 1]);
-  const back = () => (idx === 0 ? navigate({ to: "/" }) : goto(steps[idx - 1]));
+  const next = () => goto(steps[idx + 1] ?? "done");
+  const back = () => (idx === 0 ? navigate({ to: "/" }) : goto(steps[idx - 1] ?? "idea"));
 
   const actionText = { primary: session.action, smaller: session.smaller, alternative: session.alternative }[d.actionChoice];
   const planned = state.actions.find((a) => a.sessionId === session.id && a.status === "planned");

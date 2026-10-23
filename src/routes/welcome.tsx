@@ -49,7 +49,7 @@ function Welcome() {
   };
 
   const finish = () => {
-    const profile = { ...p, primaryChange: p.changes.length === 1 ? p.changes[0] : p.primaryChange };
+    const profile = { ...p, primaryChange: p.changes.length === 1 ? (p.changes[0] ?? "") : p.primaryChange };
     const text = [strengthStarter, strength.trim()].filter(Boolean).join(" — ");
     update((s) => ({
       ...s,
@@ -204,7 +204,7 @@ function Welcome() {
     },
   };
 
-  const cur = steps[step];
+  const cur = steps[step]!;
   return (
     <Frame>
       <div className="mb-8">
