@@ -228,7 +228,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
   );
 }
 
-function SaveStep({ session, draft, actionText, h, onDone }: { session: Session; draft: SessionDraft; actionText: string; h: React.RefObject<HTMLHeadingElement | null>; onDone: () => void }) {
+function SaveStep({ session, draft, actionText, h, onDone }: { session: Session; draft: SessionDraft; actionText: string; h: import("react").RefObject<HTMLHeadingElement | null>; onDone: () => void }) {
   const { update } = useApp();
   const [type, setType] = useState(draft.reflection ? "reflection" : "commitment");
   const initial = (t: string) =>
@@ -278,7 +278,7 @@ function SaveStep({ session, draft, actionText, h, onDone }: { session: Session;
   );
 }
 
-function Step({ title, children, h }: { title: string; children: React.ReactNode; h: React.RefObject<HTMLHeadingElement | null> }) {
+function Step({ title, children, h }: { title: string; children: import("react").ReactNode; h: import("react").RefObject<HTMLHeadingElement | null> }) {
   return (
     <div>
       <h2 ref={h} tabIndex={-1} className="mb-6 text-3xl text-primary md:text-4xl">{title}</h2>
