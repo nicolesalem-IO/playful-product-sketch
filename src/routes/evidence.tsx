@@ -98,7 +98,7 @@ function EvidencePage() {
   );
 }
 
-function IconBtn({ label, onClick, children, pressed }: { label: string; onClick: () => void; children: React.ReactNode; pressed?: boolean }) {
+function IconBtn({ label, onClick, children, pressed }: { label: string; onClick: () => void; children: import("react").ReactNode; pressed?: boolean }) {
   return (
     <button aria-label={label} aria-pressed={pressed} title={label} onClick={onClick}
       className="flex h-11 w-11 items-center justify-center rounded-full text-muted-foreground hover:bg-surface hover:text-primary">{children}</button>
