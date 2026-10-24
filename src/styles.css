@@ -5,8 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-serif: "Newsreader", Georgia, serif;
-  --font-sans: "Figtree", system-ui, sans-serif;
+  --font-serif: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -34,33 +34,54 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-primary-soft: var(--primary-soft);
+  --color-mint: var(--mint);
+  --color-mint-dim: var(--mint-dim);
+  --color-sky: var(--sky);
+  --color-sky-light: var(--sky-light);
+  --color-hint: var(--hint);
+  --color-peach: var(--peach);
+  --color-orange: var(--orange);
+  --color-panel-peach: var(--panel-peach);
+  --color-panel-blue: var(--panel-blue);
+  --color-panel-mint: var(--panel-mint);
 }
 
 :root {
   --radius: 0.875rem;
-  /* Ivory #FAF7F2, plum #4B2848, terracotta #B96952, lavender #EEE8F2, charcoal #29252C, sage #6E8271 */
-  --background: oklch(0.979 0.007 78);
-  --foreground: oklch(0.256 0.012 315);
-  --card: oklch(0.993 0.004 78);
-  --card-foreground: oklch(0.256 0.012 315);
-  --popover: oklch(0.993 0.004 78);
-  --popover-foreground: oklch(0.256 0.012 315);
-  --primary: oklch(0.33 0.075 330);
-  --primary-foreground: oklch(0.979 0.007 78);
-  --secondary: oklch(0.935 0.016 310);
-  --secondary-foreground: oklch(0.33 0.075 330);
-  --surface: oklch(0.935 0.016 310);
-  --muted: oklch(0.95 0.008 78);
-  --muted-foreground: oklch(0.47 0.015 315);
-  --accent: oklch(0.6 0.105 38);
-  --accent-foreground: oklch(0.99 0.004 78);
-  --success: oklch(0.56 0.035 150);
-  --success-foreground: oklch(0.99 0.004 78);
-  --destructive: oklch(0.52 0.17 27);
-  --destructive-foreground: oklch(0.99 0.004 78);
-  --border: oklch(0.9 0.012 310);
-  --input: oklch(0.86 0.014 310);
-  --ring: oklch(0.6 0.105 38);
+  --background: #FBF9F4;
+  --foreground: #1B1C19;
+  --card: #FFFFFF;
+  --card-foreground: #1B1C19;
+  --popover: #FFFFFF;
+  --popover-foreground: #1B1C19;
+  --primary: #0E5647;
+  --primary-foreground: #FFFFFF;
+  --primary-soft: #2E6F5E;
+  --mint: #AEF0DA;
+  --mint-dim: #92D3BF;
+  --secondary: #F5F3EE;
+  --secondary-foreground: #0E5647;
+  --sky: #336575;
+  --sky-light: #B8EAFE;
+  --surface: #F0EEE9;
+  --muted: #F5F3EE;
+  --muted-foreground: #3F4945;
+  --hint: #6F7975;
+  --accent: #6F4200;
+  --accent-foreground: #FFFFFF;
+  --peach: #FFDCBB;
+  --orange: #FFB869;
+  --panel-peach: #FDEEDB;
+  --panel-blue: #DCF1F9;
+  --panel-mint: #E1F2EA;
+  --success: #2D7A5D;
+  --success-foreground: #FFFFFF;
+  --destructive: #BA1A1A;
+  --destructive-foreground: #FFFFFF;
+  --border: #E4E2DD;
+  --input: #E4E2DD;
+  --ring: #2E6F5E;
 }
 
 @layer base {
@@ -72,7 +93,7 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3 { font-family: var(--font-serif); font-weight: 500; letter-spacing: -0.01em; }
+  h1, h2, h3 { font-family: var(--font-serif); font-weight: 700; letter-spacing: -0.02em; }
   :focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
 }
 

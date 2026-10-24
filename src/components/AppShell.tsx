@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Sun, Map, BookHeart, NotebookPen, UserRound } from "lucide-react";
 import type { ReactNode } from "react";
+import { Logo } from "@/components/Logo";
 
 const nav = [
   { to: "/", label: "Today", icon: Sun },
@@ -14,7 +15,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen md:flex">
       <aside className="hidden md:flex md:w-60 md:flex-col md:border-r md:px-5 md:py-8 sticky top-0 h-screen">
         <Link to="/" className="mb-10 block">
-          <span className="font-serif text-2xl text-primary">Own Your Presence</span>
+          <span className="flex items-center gap-2.5"><Logo className="h-10 w-10" /><span className="font-serif text-xl font-bold leading-tight text-primary">Own Your Presence</span></span>
           <span className="mt-1 block text-sm text-muted-foreground">Warmth. Confidence. Recognition.</span>
         </Link>
         <nav aria-label="Main" className="flex flex-col gap-1">
@@ -31,7 +32,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
 
       <header className="flex items-center justify-between px-5 pt-5 md:hidden">
-        <Link to="/" className="font-serif text-xl text-primary">Own Your Presence</Link>
+        <Link to="/" className="flex items-center gap-2 font-serif text-lg font-bold text-primary"><Logo className="h-8 w-8" />Own Your Presence</Link>
         <Link to="/settings" aria-label="Profile and settings" className="flex h-11 w-11 items-center justify-center rounded-full border bg-card text-primary">
           <UserRound className="h-5 w-5" aria-hidden />
         </Link>
