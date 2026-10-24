@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Check, Star } from "lucide-react";
 import { AppShell, Loading } from "@/components/AppShell";
+import { ProgressPanel } from "@/components/ProgressPanel";
 import { moduleById, sessionById, upcomingOptions, type Upcoming } from "@/content/curriculum";
 import { nextSession, suggestForUpcoming } from "@/lib/recommend";
 import { useApp, completedIds, localDate, type ActionStatus } from "@/lib/store";
@@ -103,6 +104,8 @@ function Today() {
           <Link to="/session/$id" params={{ id: inProgress[0] }} className="font-semibold text-primary underline">{sessionById(inProgress[0])?.title}</Link>
         </p>
       )}
+
+      <ProgressPanel />
 
       <Upcoming />
 

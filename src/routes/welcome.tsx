@@ -1,3 +1,5 @@
+import heroImg from "@/assets/welcome-hero.jpg";
+import { Logo } from "@/components/Logo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
 import { ArrowLeft, Check } from "lucide-react";
@@ -71,7 +73,8 @@ function Welcome() {
     return (
       <Frame>
         <div className="flex min-h-[70vh] flex-col justify-center animate-rise">
-          <p className="eyebrow mb-4">Own Your Presence</p>
+          <img src={heroImg} alt="Illustration of a calm, confident woman among leaves" width={1024} height={768} className="mb-8 aspect-[4/3] w-full max-w-md rounded-3xl object-cover" />
+          <p className="eyebrow mb-4 flex items-center gap-2"><Logo className="h-7 w-7" /> Own Your Presence</p>
           <h1 className="text-4xl leading-tight text-primary md:text-6xl">You don't have to become someone else to be taken seriously.</h1>
           <p className="mt-6 text-lg text-muted-foreground">
             Learn to make your strengths visible, connect with people, and speak with more confidence—one small practice at a time.

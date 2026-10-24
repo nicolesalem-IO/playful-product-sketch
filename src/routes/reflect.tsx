@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { Search, CalendarDays, NotebookPen } from "lucide-react";
 import { AppShell, PageTitle, Loading } from "@/components/AppShell";
 import { moduleById, sessionById } from "@/content/curriculum";
 import { useApp, localDate, uid, daysBetween } from "@/lib/store";
@@ -28,6 +29,8 @@ function ReflectPage() {
   const { state, hydrated, update } = useApp();
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
+  const [query, setQuery] = useState("");
+  const [filter, setFilter] = useState<string | null>(null);
   if (!hydrated) return <Loading />;
 
   const today = localDate();
@@ -79,27 +82,57 @@ function ReflectPage() {
         <button className="btn btn-primary mt-6" disabled={!Object.values(answers).some((v) => v.trim())} onClick={submit}>Save reflection</button>
       </section>
 
-      {state.reflections.length > 0 && (
-        <section className="mt-12">
-          <h2 className="mb-4 text-2xl">Earlier reflections</h2>
-          <ul className="flex flex-col gap-3">
-            {state.reflections.map((r) => (
-              <li key={r.id} className="card-quiet p-5">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm text-muted-foreground">{new Date(r.date + "T00:00").toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
-                  <button className="text-sm text-muted-foreground underline hover:text-destructive" onClick={() => confirm("Delete this reflection?") && update((s) => ({ ...s, reflections: s.reflections.filter((x) => x.id !== r.id) }))}>Delete</button>
-                </div>
-                {prompts.filter((p) => r.answers[p.id]).map((p) => (
-                  <div key={p.id} className="mt-3">
-                    <p className="font-semibold">{p.q}</p>
-                    <p className="whitespace-pre-wrap text-muted-foreground">{r.answers[p.id]}</p>
-                  </div>
+      {state.reflections.length > 0 && (() => {
+        const q = query.trim().toLowerCase();
+        const list = state.reflections.filter((r) =>
+          (!filter || r.answers[filter]) && (!q || Object.values(r.answers).some((v) => v.toLowerCase().includes(q))));
+        const counts = prompts.map((p) => ({ ...p, n: state.reflections.filter((r) => r.answers[p.id]).length }));
+        const maxN = Math.max(1, ...counts.map((c) => c.n));
+        return (
+          <section className="mt-12" aria-label="Saved reflections">
+            <h2 className="mb-1 flex items-center gap-2 text-2xl"><NotebookPen className="h-6 w-6 text-primary" aria-hidden /> Your saved reflections</h2>
+            <p className="mb-5 text-muted-foreground">{state.reflections.length} saved. Tap a theme to see only those answers.</p>
+            <div className="mb-6 rounded-2xl bg-panel-mint p-5">
+              <p className="mb-3 text-sm font-semibold">What you reflect on most</p>
+              <ul className="flex flex-col gap-2">
+                {counts.map((c) => (
+                  <li key={c.id}>
+                    <button className="w-full text-left" aria-pressed={filter === c.id} onClick={() => setFilter(filter === c.id ? null : c.id)}>
+                      <span className={`block text-sm ${filter === c.id ? "font-bold text-primary" : ""}`}>{c.q}</span>
+                      <span className="mt-1 flex items-center gap-2">
+                        <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-card"><span className="block h-full rounded-full bg-primary" style={{ width: `${(c.n / maxN) * 100}%` }} /></span>
+                        <span className="w-6 text-right text-xs text-muted-foreground">{c.n}</span>
+                      </span>
+                    </button>
+                  </li>
                 ))}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+              </ul>
+            </div>
+            <label className="relative mb-4 block">
+              <span className="sr-only">Search reflections</span>
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-hint" aria-hidden />
+              <input className="field !pl-9" placeholder="Search your reflections" value={query} onChange={(e) => setQuery(e.target.value)} />
+            </label>
+            {list.length === 0 && <p className="text-muted-foreground">No reflections match.</p>}
+            <ul className="flex flex-col gap-3">
+              {list.map((r) => (
+                <li key={r.id} className="card-quiet p-5">
+                  <div className="flex items-center justify-between">
+                    <p className="flex items-center gap-2 rounded-full bg-surface px-3 py-1 text-sm font-semibold text-primary"><CalendarDays className="h-4 w-4" aria-hidden />{new Date(r.date + "T00:00").toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}</p>
+                    <button className="text-sm text-muted-foreground underline hover:text-destructive" onClick={() => confirm("Delete this reflection?") && update((s) => ({ ...s, reflections: s.reflections.filter((x) => x.id !== r.id) }))}>Delete</button>
+                  </div>
+                  {prompts.filter((p) => r.answers[p.id] && (!filter || filter === p.id)).map((p) => (
+                    <div key={p.id} className="mt-3 border-l-4 border-mint-dim pl-3">
+                      <p className="font-semibold">{p.q}</p>
+                      <p className="whitespace-pre-wrap text-muted-foreground">{r.answers[p.id]}</p>
+                    </div>
+                  ))}
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })()}
     </AppShell>
   );
 }
