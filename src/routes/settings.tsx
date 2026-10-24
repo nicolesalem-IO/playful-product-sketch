@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AppShell, PageTitle, Loading } from "@/components/AppShell";
 import { modules, type ModuleId } from "@/content/curriculum";
 import { changeOptions } from "@/lib/recommend";
-import { useApp, type Rhythm } from "@/lib/store";
+import { useApp, type Rhythm, type SyncStatus } from "@/lib/store";
 
 export const Route = createFileRoute("/settings")({
   head: () => ({
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/settings")({
 });
 
 function SettingsPage() {
-  const { state, hydrated, update, reset } = useApp();
+  const { state, hydrated, update, reset, account } = useApp();
   const [confirming, setConfirming] = useState(false);
   const [msg, setMsg] = useState("");
   if (!hydrated) return <Loading />;
@@ -88,8 +88,14 @@ function SettingsPage() {
         <p className="mt-1 text-sm text-muted-foreground">Motion is also reduced automatically if your device asks for it.</p>
       </Group>
 
+      <AccountGroup />
+
       <Group title="Your data">
-        <p>Everything you enter is saved only in this browser on this device. It isn't sent anywhere. Other people using the same browser profile may be able to see it, and clearing your browser data will erase it.</p>
+        {account ? (
+          <p>Your entries are saved to your account as <strong>{account}</strong> and kept in this browser for quick access. Signing out removes them from this browser.</p>
+        ) : (
+          <p>Everything you enter is saved only in this browser on this device. Other people using the same browser profile may be able to see it, and clearing your browser data will erase it. Sign in above to keep a copy in your account.</p>
+        )}
         <p className="mt-2 text-muted-foreground">You can delete individual entries from My Evidence and Reflect.</p>
         <div className="mt-4 flex flex-wrap gap-3">
           <button className="btn btn-secondary" onClick={exportData}>Export my data (JSON)</button>
@@ -97,9 +103,9 @@ function SettingsPage() {
         </div>
         {confirming && (
           <div className="mt-4 rounded-xl border border-destructive/40 p-4" role="alertdialog" aria-label="Confirm reset">
-            <p>This permanently erases your answers, evidence, reflections, and progress from this browser. Consider exporting first.</p>
+            <p>This permanently erases your answers, evidence, reflections, and progress from this browser{account ? " and from your account" : ""}. Consider exporting first.</p>
             <div className="mt-3 flex gap-3">
-              <button className="btn bg-destructive text-destructive-foreground" onClick={() => { reset(); setConfirming(false); setMsg("Your data has been reset."); }}>Yes, erase everything</button>
+              <button className="btn bg-destructive text-destructive-foreground" onClick={async () => { await reset(); setConfirming(false); setMsg("Your data has been reset."); }}>Yes, erase everything</button>
               <button className="btn btn-ghost" onClick={() => setConfirming(false)}>Cancel</button>
             </div>
           </div>
@@ -107,6 +113,59 @@ function SettingsPage() {
         {msg && <p className="mt-3" role="status">{msg} <Link to="/welcome" className="font-semibold text-primary underline">Start again</Link></p>}
       </Group>
     </AppShell>
+  );
+}
+
+const syncLabels: Record<SyncStatus, string> = {
+  local: "",
+  loading: "Loading your saved entries…",
+  saving: "Saving…",
+  saved: "All changes saved to your account.",
+  error: "Couldn't reach your account. Your changes are still saved in this browser.",
+};
+
+function AccountGroup() {
+  const { account, sync, signIn, signOut } = useApp();
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  if (account) {
+    return (
+      <Group title="Account">
+        <p>Signed in as <strong>{account}</strong>.</p>
+        <p className={`mt-1 text-sm ${sync === "error" ? "text-destructive" : "text-muted-foreground"}`} role="status">{syncLabels[sync]}</p>
+        <button className="btn btn-secondary mt-4" onClick={() => signOut()}>Sign out</button>
+      </Group>
+    );
+  }
+
+  const submit = async (e: import("react").FormEvent) => {
+    e.preventDefault();
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) { setError("Enter a valid email address."); return; }
+    setBusy(true); setError("");
+    const err = await signIn(email.trim());
+    setBusy(false);
+    if (err) setError(err); else setSent(true);
+  };
+
+  return (
+    <Group title="Account">
+      {sent ? (
+        <p role="status">Check <strong>{email.trim()}</strong> for a sign-in link. Open it on this device to finish signing in. <button className="font-semibold text-primary underline" onClick={() => setSent(false)}>Use a different email</button></p>
+      ) : (
+        <form onSubmit={submit} noValidate>
+          <p className="mb-4 text-muted-foreground">Optional. Sign in to keep your entries safe in your account and use them on other devices. We'll email you a link, so there's no password to remember.</p>
+          <label className="block">
+            <span className="mb-1.5 block font-semibold">Email</span>
+            <input className="field" type="email" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); setError(""); }} />
+          </label>
+          {error && <p className="mt-2 text-destructive" role="alert">{error}</p>}
+          <button className="btn btn-primary mt-4" type="submit" disabled={busy}>{busy ? "Sending…" : "Email me a sign-in link"}</button>
+        </form>
+      )}
+    </Group>
   );
 }
 
