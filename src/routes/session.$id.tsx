@@ -12,7 +12,7 @@ export const Route = createFileRoute("/session/$id")({
     return { title: s.title };
   },
   head: ({ loaderData }) => {
-    const t = loaderData ? `${loaderData.title} — Own Your Presence` : "Session — Own Your Presence";
+    const t = loaderData ? `${loaderData.title} | Own Your Presence` : "Session | Own Your Presence";
     return {
       meta: [
         { title: t },
@@ -216,7 +216,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
           <div className="text-center">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground"><Check className="h-8 w-8" aria-hidden /></div>
             <h2 ref={headingRef} tabIndex={-1} className="text-3xl text-primary md:text-4xl">{session.completion}</h2>
-            <p className="mt-3 text-muted-foreground" role="status">Session complete.{planned ? " Your practice is saved as planned—you can check in on it later." : ""}</p>
+            <p className="mt-3 text-muted-foreground" role="status">Session complete.{planned ? " Your practice is saved as planned, and you can check in on it later." : ""}</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link to="/" className="btn btn-primary">Back to Today</Link>
               <Link to="/path" className="btn btn-secondary">See your path</Link>

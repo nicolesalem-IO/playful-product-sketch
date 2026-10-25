@@ -9,9 +9,9 @@ import { useApp, type Rhythm, type SyncStatus } from "@/lib/store";
 export const Route = createFileRoute("/settings")({
   head: () => ({
     meta: [
-      { title: "Profile & settings — Own Your Presence" },
+      { title: "Profile & settings | Own Your Presence" },
       { name: "description", content: "Manage your name, focus, session length, and personal data." },
-      { property: "og:title", content: "Profile & settings — Own Your Presence" },
+      { property: "og:title", content: "Profile & settings | Own Your Presence" },
       { property: "og:description", content: "Manage your name, focus, session length, and personal data." },
     ],
   }),

@@ -8,9 +8,9 @@ import { useApp, localDate, uid, daysBetween } from "@/lib/store";
 export const Route = createFileRoute("/reflect")({
   head: () => ({
     meta: [
-      { title: "Reflect — Own Your Presence" },
+      { title: "Reflect | Own Your Presence" },
       { name: "description", content: "An optional weekly reflection on what you practiced and noticed." },
-      { property: "og:title", content: "Reflect — Own Your Presence" },
+      { property: "og:title", content: "Reflect | Own Your Presence" },
       { property: "og:description", content: "An optional weekly reflection on what you practiced and noticed." },
     ],
   }),
@@ -21,7 +21,7 @@ const prompts = [
   { id: "credit", q: "Where did you give yourself more credit?" },
   { id: "practiced", q: "What did you practice, even if it felt awkward?" },
   { id: "surprised", q: "What response or result surprised you?" },
-  { id: "fit", q: "What felt authentic—and what did not fit?" },
+  { id: "fit", q: "What felt authentic, and what didn't fit?" },
   { id: "carry", q: "What would you like to carry into next week?" },
 ];
 

@@ -49,11 +49,11 @@ export const strengthStarters = [
 ];
 
 const focusIntro: Record<ModuleId, string> = {
-  value: "We'll begin by naming strengths you may be overlooking.",
-  contribution: "We'll begin with naming your contribution while still recognizing the people around you.",
+  value: "We'll begin with what you want to be known for, and how people see you today.",
+  contribution: "We'll begin with naming your part in your wins while thanking the people who helped.",
   warmth: "We'll begin with showing warmth and competence together, in ways that feel like you.",
-  visible: "We'll begin with small, manageable ways to let your ideas and work be seen.",
-  connect: "We'll begin with honest, low-pressure ways to reach out.",
+  visible: "We'll begin with manageable ways to let your work be seen, in the room and online.",
+  connect: "We'll begin with small acts of generosity and reconnecting with people who know your work.",
   ask: "We'll begin with naming what you want plainly.",
   grounded: "We'll begin with separating what happened from the story you add to it.",
 };

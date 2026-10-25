@@ -8,9 +8,9 @@ import { useApp, categoryLabels, localDate, uid, type Evidence, type EvidenceCat
 export const Route = createFileRoute("/evidence")({
   head: () => ({
     meta: [
-      { title: "My Evidence — Own Your Presence" },
+      { title: "My Evidence | Own Your Presence" },
       { name: "description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
-      { property: "og:title", content: "My Evidence — Own Your Presence" },
+      { property: "og:title", content: "My Evidence | Own Your Presence" },
       { property: "og:description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
     ],
   }),

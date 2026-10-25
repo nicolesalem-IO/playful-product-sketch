@@ -10,9 +10,9 @@ import { useApp, completedIds, localDate, type ActionStatus } from "@/lib/store"
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Today — Own Your Presence" },
+      { title: "Today | Own Your Presence" },
       { name: "description", content: "Your daily practice for naming your strengths and letting them be seen." },
-      { property: "og:title", content: "Own Your Presence — Warmth. Confidence. Recognition." },
+      { property: "og:title", content: "Own Your Presence | Warmth. Confidence. Recognition." },
       { property: "og:description", content: "Short coaching sessions for women navigating career transitions." },
     ],
   }),

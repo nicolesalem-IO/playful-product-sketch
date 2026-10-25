@@ -14,9 +14,9 @@ import { useApp, localDate, type Profile, type Rhythm } from "@/lib/store";
 export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
-      { title: "Own Your Presence — A career learning program for women" },
+      { title: "Own Your Presence | A career learning program for women" },
       { name: "description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
-      { property: "og:title", content: "Own Your Presence — A career learning program for women" },
+      { property: "og:title", content: "Own Your Presence | A career learning program for women" },
       { property: "og:description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
     ],
   }),
@@ -62,7 +62,7 @@ function Welcome() {
 
   const finish = () => {
     const profile = { ...p, primaryChange: p.changes.length === 1 ? (p.changes[0] ?? "") : p.primaryChange };
-    const text = [strengthStarter, strength.trim()].filter(Boolean).join(" — ");
+    const text = [strengthStarter, strength.trim()].filter(Boolean).join(": ");
     update((s) => ({
       ...s,
       onboarded: true,
@@ -131,7 +131,7 @@ function Welcome() {
 
   if (step === SUMMARY) {
     const session = nextSession(p.focus, []);
-    const text = [strengthStarter, strength.trim()].filter(Boolean).join(" — ");
+    const text = [strengthStarter, strength.trim()].filter(Boolean).join(": ");
     return (
       <Frame>
         <div className="animate-rise">

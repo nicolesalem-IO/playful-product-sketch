@@ -8,9 +8,9 @@ import { useApp, completedIds } from "@/lib/store";
 export const Route = createFileRoute("/path")({
   head: () => ({
     meta: [
-      { title: "Your Path — Own Your Presence" },
+      { title: "Your Path | Own Your Presence" },
       { name: "description", content: "Seven modules, twenty-one sessions. Follow the suggested path or choose what you need today." },
-      { property: "og:title", content: "Your Path — Own Your Presence" },
+      { property: "og:title", content: "Your Path | Own Your Presence" },
       { property: "og:description", content: "Seven modules, twenty-one sessions. Follow the suggested path or choose what you need today." },
     ],
   }),
