@@ -12,6 +12,8 @@ export const Route = createFileRoute("/reflect")({
       { name: "description", content: "An optional weekly reflection on what you practiced and noticed." },
       { property: "og:title", content: "Reflect | Own Your Presence" },
       { property: "og:description", content: "An optional weekly reflection on what you practiced and noticed." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: ReflectPage,

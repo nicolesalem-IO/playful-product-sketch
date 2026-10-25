@@ -13,6 +13,8 @@ export const Route = createFileRoute("/settings")({
       { name: "description", content: "Manage your name, focus, session length, and personal data." },
       { property: "og:title", content: "Profile & settings | Own Your Presence" },
       { property: "og:description", content: "Manage your name, focus, session length, and personal data." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SettingsPage,

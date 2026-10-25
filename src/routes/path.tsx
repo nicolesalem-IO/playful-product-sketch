@@ -12,6 +12,8 @@ export const Route = createFileRoute("/path")({
       { name: "description", content: "Seven modules, twenty-one sessions. Follow the suggested path or choose what you need today." },
       { property: "og:title", content: "Your Path | Own Your Presence" },
       { property: "og:description", content: "Seven modules, twenty-one sessions. Follow the suggested path or choose what you need today." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: PathPage,

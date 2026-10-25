@@ -12,6 +12,8 @@ export const Route = createFileRoute("/evidence")({
       { name: "description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
       { property: "og:title", content: "My Evidence | Own Your Presence" },
       { property: "og:description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EvidencePage,

@@ -19,6 +19,8 @@ export const Route = createFileRoute("/session/$id")({
         { name: "description", content: "A short coaching session: one idea, one reflection, one small practice." },
         { property: "og:title", content: t },
         { property: "og:description", content: "A short coaching session: one idea, one reflection, one small practice." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },

@@ -177,7 +177,7 @@
 .progress-stat + .progress-stat { border-left: 1px solid var(--border); border-radius: 0; }
 .progress-stat > svg { margin-bottom: 0.5rem; }
 .welcome-frame { max-width: 680px; }
-.welcome-image { height: 260px; object-position: center 38%; border-radius: var(--radius); }
+.welcome-image { height: 260px; object-position: center 20%; border-radius: var(--radius); }
 .welcome-brand { font-size: 2rem; line-height: 1.2; }
 .welcome-intro > p.bg-surface { background: transparent; padding: 0; border-radius: 0; font-size: 0.75rem; color: var(--accent); }
 .journal-field { background: color-mix(in srgb, var(--card) 45%, var(--background)); border-color: var(--input); }

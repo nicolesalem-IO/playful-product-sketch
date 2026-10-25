@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Your daily practice for naming your strengths and letting them be seen." },
       { property: "og:title", content: "Own Your Presence | Warmth. Confidence. Recognition." },
       { property: "og:description", content: "Short coaching sessions for women navigating career transitions." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Today,

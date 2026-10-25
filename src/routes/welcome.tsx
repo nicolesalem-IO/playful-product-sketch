@@ -18,6 +18,8 @@ export const Route = createFileRoute("/welcome")({
       { name: "description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
       { property: "og:title", content: "Own Your Presence | A career learning program for women" },
       { property: "og:description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Welcome,
