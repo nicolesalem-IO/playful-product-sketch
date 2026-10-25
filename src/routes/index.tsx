@@ -70,7 +70,7 @@ function Today() {
       {doneToday ? (
         <section className="card-quiet p-6 md:p-8 animate-rise" aria-label="Today's completed practice">
           <div className="flex items-center gap-3 text-success">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-success text-success-foreground"><Check className="h-4 w-4" aria-hidden /></span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold text-gold-foreground"><Check className="h-4 w-4" aria-hidden /></span>
             <span className="font-semibold">Today's practice is complete</span>
           </div>
           <h2 className="mt-4 text-3xl text-primary">{doneToday.completion}</h2>
@@ -113,7 +113,7 @@ function Today() {
         <h2 className="mb-3 text-2xl">From your evidence</h2>
         {preview ? (
           <Link to="/evidence" className="card-quiet block p-5 hover:border-primary">
-            <p className="flex items-center gap-2 font-semibold">{preview.favorite && <Star className="h-4 w-4 fill-accent text-accent" aria-label="Favorite" />}{preview.title}</p>
+            <p className="flex items-center gap-2 font-semibold">{preview.favorite && <Star className="h-4 w-4 fill-gold text-accent" aria-label="Favorite" />}{preview.title}</p>
             <p className="mt-1 line-clamp-3 whitespace-pre-wrap text-muted-foreground">{preview.content}</p>
           </Link>
         ) : (

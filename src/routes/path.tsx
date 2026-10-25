@@ -69,7 +69,7 @@ function PathPage() {
                         </span>
                         <span className="flex-1">{s.title}</span>
                         {complete && <span className="sr-only">Completed</span>}
-                        {s.id === suggested.id && <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-accent-foreground">Suggested next</span>}
+                        {s.id === suggested.id && <span className="rounded-full bg-gold px-2.5 py-0.5 text-xs font-bold text-gold-foreground">Suggested next</span>}
                       </Link>
                     </li>
                   );

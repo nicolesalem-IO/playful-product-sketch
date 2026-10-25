@@ -214,7 +214,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
 
         {d.step === "done" && (
           <div className="text-center">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-success text-success-foreground"><Check className="h-8 w-8" aria-hidden /></div>
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gold text-gold-foreground"><Check className="h-8 w-8" aria-hidden /></div>
             <h2 ref={headingRef} tabIndex={-1} className="text-3xl text-primary md:text-4xl">{session.completion}</h2>
             <p className="mt-3 text-muted-foreground" role="status">Session complete.{planned ? " Your practice is saved as planned, and you can check in on it later." : ""}</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

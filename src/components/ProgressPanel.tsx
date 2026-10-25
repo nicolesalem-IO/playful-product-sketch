@@ -32,7 +32,7 @@ export function ProgressPanel() {
       <div className="mt-4">
         <div className="mb-1 flex justify-between text-sm"><span>{done.length} of {total} sessions</span><span className="font-semibold text-primary">{pct}%</span></div>
         <div className="h-3 overflow-hidden rounded-full bg-surface" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full bg-gold transition-all" style={{ width: `${pct}%` }} />
         </div>
       </div>
       <div className="mt-5 grid grid-cols-3 gap-2 text-center">
@@ -44,7 +44,7 @@ export function ProgressPanel() {
       <div className="mt-2 flex h-20 items-end gap-2" aria-label={`Weekly activity: ${weeks.join(", ")}`}>
         {weeks.map((n, i) => (
           <div key={i} className="flex flex-1 flex-col items-center gap-1">
-            <div className={`w-full rounded-md ${i === 7 ? "bg-primary" : "bg-mint-dim"}`} style={{ height: `${Math.max(6, (n / max) * 64)}px`, opacity: n ? 1 : 0.35 }} />
+            <div className={`w-full rounded-md ${i === 7 ? "bg-gold" : "bg-mint-dim"}`} style={{ height: `${Math.max(6, (n / max) * 64)}px`, opacity: n ? 1 : 0.35 }} />
             <span className="text-[10px] text-hint">{i === 7 ? "Now" : `${7 - i}w`}</span>
           </div>
         ))}

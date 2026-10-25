@@ -79,7 +79,7 @@ function EvidencePage() {
                       </div>
                       <div className="flex shrink-0">
                         <IconBtn label={e.favorite ? "Remove from favorites" : "Add to favorites"} pressed={e.favorite} onClick={() => save({ ...e, favorite: !e.favorite })}>
-                          <Star className={`h-4 w-4 ${e.favorite ? "fill-accent text-accent" : ""}`} />
+                          <Star className={`h-4 w-4 ${e.favorite ? "fill-gold text-accent" : ""}`} />
                         </IconBtn>
                         <IconBtn label="Edit" onClick={() => setEditing(e.id)}><Pencil className="h-4 w-4" /></IconBtn>
                         <IconBtn label="Delete" onClick={() => remove(e.id)}><Trash2 className="h-4 w-4" /></IconBtn>

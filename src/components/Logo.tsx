@@ -3,7 +3,7 @@ export function Logo({ className = "h-9 w-9" }: { className?: string }) {
     <svg viewBox="0 0 48 48" className={className} role="img" aria-label="Own Your Presence logo">
       <rect width="48" height="48" rx="14" fill="var(--primary)" />
       {/* Leaf, stem and midrib */}
-      <path d="M12 36C11.5 21 21 11.5 36.5 11.5 36.5 27 27 36.5 12 36z" fill="var(--mint)" />
+      <path d="M12 36C11.5 21 21 11.5 36.5 11.5 36.5 27 27 36.5 12 36z" fill="var(--gold)" />
       <path d="M10 38 31.5 16.5" stroke="var(--primary)" strokeWidth="1.9" strokeLinecap="round" fill="none" />
       {/* Veins */}
       <path

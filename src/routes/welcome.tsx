@@ -224,7 +224,7 @@ function Welcome() {
             <button key={m.id} type="button" role="radio" aria-checked={p.focus === m.id} className="chip"
               onClick={() => { setFocusTouched(true); setP({ ...p, focus: m.id as ModuleId }); }}>
               <span className="flex-1">{m.practiceLabel}</span>
-              {m.id === recommended && <span className="rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-accent-foreground">Suggested</span>}
+              {m.id === recommended && <span className="rounded-full bg-gold px-2.5 py-0.5 text-xs font-bold text-gold-foreground">Suggested</span>}
             </button>
           ))}
         </div>
