@@ -14,10 +14,10 @@ import { useApp, localDate, type Profile, type Rhythm } from "@/lib/store";
 export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
-      { title: "Find your starting point — Own Your Presence" },
-      { name: "description", content: "A few gentle questions to personalize your coaching sessions." },
-      { property: "og:title", content: "Find your starting point — Own Your Presence" },
-      { property: "og:description", content: "A few gentle questions to personalize your coaching sessions." },
+      { title: "Own Your Presence — A career learning program for women" },
+      { name: "description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
+      { property: "og:title", content: "Own Your Presence — A career learning program for women" },
+      { property: "og:description", content: "A self-paced career learning program for women: 21 short sessions on recognizing your strengths, speaking up, and asking for what you want." },
     ],
   }),
   component: Welcome,
@@ -86,10 +86,19 @@ function Welcome() {
         <div className="flex min-h-[70vh] flex-col justify-center animate-rise">
           <img src={heroImg} alt="Illustration of a calm, confident woman among leaves" width={1024} height={768} className="mb-8 aspect-[4/3] w-full max-w-md rounded-3xl object-cover" />
           <p className="eyebrow mb-4 flex items-center gap-2"><Logo className="h-7 w-7" /> Own Your Presence</p>
+          <p className="mb-3 inline-flex w-fit rounded-full bg-surface px-3.5 py-1.5 text-sm font-semibold text-primary">
+            A career learning program for women
+          </p>
           <h1 className="text-4xl leading-tight text-primary md:text-6xl">You don't have to become someone else to be taken seriously.</h1>
           <p className="mt-6 text-lg text-muted-foreground">
-            Learn to make your strengths visible, connect with people, and speak with more confidence—one small practice at a time.
+            Whether you're returning to work, changing fields, or stepping into leadership, Own Your Presence helps you
+            recognize your strengths, talk about your work with confidence, and ask for what you want.
           </p>
+          <ul className="mt-6 flex flex-wrap gap-2 text-sm text-primary" aria-label="How the program works">
+            {["21 short sessions", "2–5 minutes a day", "At your own pace"].map((t) => (
+              <li key={t} className="rounded-full border border-primary/20 px-3 py-1">{t}</li>
+            ))}
+          </ul>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <button className="btn btn-primary" onClick={() => go(1)}>Find my starting point</button>
             <button className="btn btn-ghost" onClick={explore}>Explore first</button>

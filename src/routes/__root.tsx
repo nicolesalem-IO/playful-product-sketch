@@ -55,8 +55,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Own Your Presence" },
-      { name: "description", content: "Short coaching sessions for women navigating career transitions." },
+      { title: "Own Your Presence — A career learning program for women" },
+      { name: "description", content: "A self-paced career learning program for women: short sessions on recognizing your strengths, speaking up, and asking for what you want." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
