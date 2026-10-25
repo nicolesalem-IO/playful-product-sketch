@@ -98,8 +98,26 @@ interface Ctx {
   /** Email of the signed-in account, or null when data stays only in this browser. */
   account: string | null;
   sync: SyncStatus;
-  signIn: (email: string) => Promise<string | null>;
+  /** Each returns an error message to show, or null on success. */
+  signUp: (email: string, password: string) => Promise<string | null>;
+  signIn: (email: string, password: string) => Promise<string | null>;
+  sendPasswordReset: (email: string) => Promise<string | null>;
+  updatePassword: (password: string) => Promise<string | null>;
+  /** True after someone opens a password-reset link, until they choose a new password. */
+  recovering: boolean;
   signOut: () => Promise<void>;
+}
+
+// Supabase's messages are written for developers; these read better in the app.
+function friendlyAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes("invalid login credentials")) return "That email and password don't match. Check them and try again.";
+  if (m.includes("already registered") || m.includes("already been registered")) return "There's already an account with that email. Try signing in instead.";
+  if (m.includes("password should be") || m.includes("weak")) return "Choose a longer password: at least 8 characters.";
+  if (m.includes("email not confirmed")) return "This account still needs its email confirmed. Check your inbox for the confirmation link.";
+  if (m.includes("rate limit") || m.includes("too many")) return "Too many tries in a short time. Wait a minute and try again.";
+  if (m.includes("fetch") || m.includes("network")) return "Couldn't connect. Check your internet connection and try again.";
+  return message;
 }
 
 const AppCtx = createContext<Ctx | null>(null);
@@ -113,6 +131,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
   const [account, setAccount] = useState<string | null>(null);
   const [sync, setSync] = useState<SyncStatus>("local");
+  const [recovering, setRecovering] = useState(false);
   const loaded = useRef(false);
   // Cloud saves start only after the account copy has been pulled and merged,
   // so a fresh browser can never overwrite someone's saved data with an empty state.
@@ -144,9 +163,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (!hydrated) return;
     const sb = getSupabase();
     if (!sb) return;
-    const { data } = sb.auth.onAuthStateChange((_event, session) => {
+    const { data } = sb.auth.onAuthStateChange((event, session) => {
       setUserId(session?.user.id ?? null);
       setAccount(session?.user.email ?? null);
+      if (event === "PASSWORD_RECOVERY") setRecovering(true);
     });
     return () => data.subscription.unsubscribe();
   }, [hydrated]);
@@ -194,28 +214,61 @@ export function AppProvider({ children }: { children: ReactNode }) {
     setState({ ...initialState, lastVisit: localDate() });
   }, [userId]);
 
-  const signIn = useCallback(async (email: string) => {
+  const signUp = useCallback(async (email: string, password: string) => {
+    const sb = getSupabase();
+    if (!sb) return "Accounts aren't available right now.";
+    const { data, error } = await sb.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: `${window.location.origin}/` },
+    });
+    if (error) return friendlyAuthError(error.message);
+    // With email confirmation off, Supabase signs the person in right away.
+    if (!data.session) return "Check your email to confirm your account, then sign in.";
+    return null;
+  }, []);
+
+  const signIn = useCallback(async (email: string, password: string) => {
     const sb = getSupabase();
     if (!sb) return "Sign-in isn't available right now.";
-    const { error } = await sb.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/settings` },
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    return error ? friendlyAuthError(error.message) : null;
+  }, []);
+
+  const sendPasswordReset = useCallback(async (email: string) => {
+    const sb = getSupabase();
+    if (!sb) return "Password reset isn't available right now.";
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/settings`,
     });
-    return error ? error.message : null;
+    return error ? friendlyAuthError(error.message) : null;
+  }, []);
+
+  const updatePassword = useCallback(async (password: string) => {
+    const sb = getSupabase();
+    if (!sb) return "Couldn't update your password right now.";
+    const { error } = await sb.auth.updateUser({ password });
+    if (error) return friendlyAuthError(error.message);
+    setRecovering(false);
+    return null;
   }, []);
 
   // Signing out clears this browser, since everything is safely stored in the account.
   const signOut = useCallback(async () => {
     const sb = getSupabase();
     cloudReady.current = false;
+    setRecovering(false);
     if (sb) await sb.auth.signOut();
     localStorage.removeItem(KEY);
     setState({ ...initialState, lastVisit: localDate() });
   }, []);
 
   const value = useMemo(
-    () => ({ state, hydrated, daysAway, update, reset, account, sync, signIn, signOut }),
-    [state, hydrated, daysAway, update, reset, account, sync, signIn, signOut],
+    () => ({
+      state, hydrated, daysAway, update, reset, account, sync,
+      signUp, signIn, sendPasswordReset, updatePassword, recovering, signOut,
+    }),
+    [state, hydrated, daysAway, update, reset, account, sync, signUp, signIn, sendPasswordReset, updatePassword, recovering, signOut],
   );
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

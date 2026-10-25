@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AppShell, PageTitle, Loading } from "@/components/AppShell";
 import { modules, type ModuleId } from "@/content/curriculum";
 import { changeOptions } from "@/lib/recommend";
+import { AccountForm, NewPasswordForm } from "@/components/AccountForm";
 import { useApp, type Rhythm, type SyncStatus } from "@/lib/store";
 
 export const Route = createFileRoute("/settings")({
@@ -37,6 +38,8 @@ function SettingsPage() {
   return (
     <AppShell>
       <PageTitle title="Profile & settings" />
+
+      <AccountGroup />
 
       <Group title="About you">
         <label className="block">
@@ -88,13 +91,11 @@ function SettingsPage() {
         <p className="mt-1 text-sm text-muted-foreground">Motion is also reduced automatically if your device asks for it.</p>
       </Group>
 
-      <AccountGroup />
-
       <Group title="Your data">
         {account ? (
           <p>Your entries are saved to your account as <strong>{account}</strong> and kept in this browser for quick access. Signing out removes them from this browser.</p>
         ) : (
-          <p>Everything you enter is saved only in this browser on this device. Other people using the same browser profile may be able to see it, and clearing your browser data will erase it. Sign in above to keep a copy in your account.</p>
+          <p>Everything you enter is saved only in this browser on this device. Other people using the same browser profile may be able to see it, and clearing your browser data will erase it. Create an account at the top of this page to keep a copy safe.</p>
         )}
         <p className="mt-2 text-muted-foreground">You can delete individual entries from My Evidence and Reflect.</p>
         <div className="mt-4 flex flex-wrap gap-3">
@@ -125,15 +126,16 @@ const syncLabels: Record<SyncStatus, string> = {
 };
 
 function AccountGroup() {
-  const { account, sync, signIn, signOut } = useApp();
-  const [email, setEmail] = useState("");
-  const [sent, setSent] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
+  const { account, sync, signOut, recovering } = useApp();
 
   if (account) {
     return (
       <Group title="Account">
+        {recovering && (
+          <div className="mb-6">
+            <NewPasswordForm />
+          </div>
+        )}
         <p>Signed in as <strong>{account}</strong>.</p>
         <p className={`mt-1 text-sm ${sync === "error" ? "text-destructive" : "text-muted-foreground"}`} role="status">{syncLabels[sync]}</p>
         <button className="btn btn-secondary mt-4" onClick={() => signOut()}>Sign out</button>
@@ -141,30 +143,10 @@ function AccountGroup() {
     );
   }
 
-  const submit = async (e: import("react").FormEvent) => {
-    e.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) { setError("Enter a valid email address."); return; }
-    setBusy(true); setError("");
-    const err = await signIn(email.trim());
-    setBusy(false);
-    if (err) setError(err); else setSent(true);
-  };
-
   return (
     <Group title="Account">
-      {sent ? (
-        <p role="status">Check <strong>{email.trim()}</strong> for a sign-in link. Open it on this device to finish signing in. <button className="font-semibold text-primary underline" onClick={() => setSent(false)}>Use a different email</button></p>
-      ) : (
-        <form onSubmit={submit} noValidate>
-          <p className="mb-4 text-muted-foreground">Optional. Sign in to keep your entries safe in your account and use them on other devices. We'll email you a link, so there's no password to remember.</p>
-          <label className="block">
-            <span className="mb-1.5 block font-semibold">Email</span>
-            <input className="field" type="email" autoComplete="email" value={email} onChange={(e) => { setEmail(e.target.value); setError(""); }} />
-          </label>
-          {error && <p className="mt-2 text-destructive" role="alert">{error}</p>}
-          <button className="btn btn-primary mt-4" type="submit" disabled={busy}>{busy ? "Sending…" : "Email me a sign-in link"}</button>
-        </form>
-      )}
+      <p className="mb-4 text-muted-foreground">Create an account to keep your entries safe and use them on other devices, or sign in to one you already have.</p>
+      <AccountForm initialMode="signin" />
     </Group>
   );
 }

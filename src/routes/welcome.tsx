@@ -8,6 +8,7 @@ import {
   changeOptions, wantOptions, momentOptions, responseOptions, strengthStarters,
   recommendFocus, explainFocus, nextSession,
 } from "@/lib/recommend";
+import { AccountForm } from "@/components/AccountForm";
 import { useApp, localDate, type Profile, type Rhythm } from "@/lib/store";
 
 export const Route = createFileRoute("/welcome")({
@@ -23,9 +24,12 @@ export const Route = createFileRoute("/welcome")({
 });
 
 const TOTAL = 7;
+// Screens after the numbered questions.
+const ACCOUNT = 8;
+const SUMMARY = 9;
 
 function Welcome() {
-  const { state, hydrated, update } = useApp();
+  const { state, hydrated, update, account } = useApp();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [p, setP] = useState<Profile>(state.profile);
@@ -67,7 +71,8 @@ function Welcome() {
         ? [{ id: "onboarding-strength", title: "A time I felt capable", content: text, category: "strengths", date: localDate(), favorite: false }, ...s.evidence]
         : s.evidence,
     }));
-    go(8);
+    // Offer an account right after the questions, unless they're already signed in.
+    go(account ? SUMMARY : ACCOUNT);
   };
 
   const explore = () => {
@@ -94,7 +99,28 @@ function Welcome() {
     );
   }
 
-  if (step === 8) {
+  if (step === ACCOUNT) {
+    return (
+      <Frame>
+        <div className="animate-rise">
+          <p className="eyebrow mb-3">One last thing{p.name ? `, ${p.name}` : ""}</p>
+          <h1 className="text-4xl leading-tight text-primary md:text-5xl">Save your progress</h1>
+          <p className="mt-4 text-lg text-muted-foreground">
+            Create a free account so your answers, evidence, and reflections are kept safe and follow you to any device.
+          </p>
+          <div className="card-quiet mt-8 p-6">
+            <AccountForm initialMode="create" onDone={() => go(SUMMARY)} />
+          </div>
+          <button className="btn btn-ghost mt-4 -ml-3" onClick={() => go(SUMMARY)}>Not now</button>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Without an account, everything stays only in this browser. You can create one later in Profile &amp; settings.
+          </p>
+        </div>
+      </Frame>
+    );
+  }
+
+  if (step === SUMMARY) {
     const session = nextSession(p.focus, []);
     const text = [strengthStarter, strength.trim()].filter(Boolean).join(" — ");
     return (
