@@ -139,9 +139,10 @@ function ReflectPage() {
 
 function Stat({ n, label }: { n: number; label: string }) {
   return (
-    <div className="card-quiet p-4">
-      <dd className="font-serif text-3xl text-primary">{n}</dd>
+    // Label first for screen readers; flex-col-reverse keeps the number on top visually.
+    <div className="card-quiet flex flex-col-reverse p-4">
       <dt className="text-sm text-muted-foreground">{label}</dt>
+      <dd className="font-serif text-3xl text-primary">{n}</dd>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import heroImg from "@/assets/welcome-hero.jpg";
 import { Logo } from "@/components/Logo";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { modules, moduleById, type ModuleId } from "@/content/curriculum";
 import {
@@ -25,10 +25,16 @@ export const Route = createFileRoute("/welcome")({
 const TOTAL = 7;
 
 function Welcome() {
-  const { state, update } = useApp();
+  const { state, hydrated, update } = useApp();
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [p, setP] = useState<Profile>(state.profile);
+
+  // On a fresh page load the saved profile arrives after the first render, so
+  // copy it in before the questions start. Otherwise finishing would erase it.
+  useEffect(() => {
+    if (hydrated && step === 0) setP(state.profile);
+  }, [hydrated, state.profile, step]);
   const [strength, setStrength] = useState("");
   const [strengthStarter, setStrengthStarter] = useState("");
   const [focusTouched, setFocusTouched] = useState(false);

@@ -240,10 +240,16 @@ function SaveStep({ session, draft, actionText, h, onDone }: { session: Session;
   const save = () => {
     if (!content.trim()) { setError("Add a few words before saving, or choose “Not this time.”"); return; }
     const t = saveTypes.find((x) => x.id === type)!;
-    update((s) => ({
-      ...s,
-      evidence: [{ id: uid(), title: title.trim() || session.title, content: content.trim(), category: t.category, date: localDate(), sessionId: session.id, favorite: false }, ...s.evidence],
-    }));
+    const text = content.trim();
+    update((s) => {
+      // Redoing a session shouldn't add a second copy of an entry that's already saved.
+      const already = s.evidence.some((e) => e.sessionId === session.id && e.category === t.category && e.content.trim() === text);
+      if (already) return s;
+      return {
+        ...s,
+        evidence: [{ id: uid(), title: title.trim() || session.title, content: text, category: t.category, date: localDate(), sessionId: session.id, favorite: false }, ...s.evidence],
+      };
+    });
     onDone();
   };
 
