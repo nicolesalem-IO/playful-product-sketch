@@ -12,6 +12,8 @@ export const Route = createFileRoute("/evidence")({
       { name: "description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
       { property: "og:title", content: "My Evidence | Own Your Presence" },
       { property: "og:description", content: "A personal collection of strengths, contributions, and moments worth remembering." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: EvidencePage,
@@ -71,8 +73,8 @@ function EvidencePage() {
                 {editing === e.id ? (
                   <EntryForm entry={e} onCancel={() => setEditing(null)} onSave={(x) => { save(x); setEditing(null); }} />
                 ) : (
-                  <article className="card-quiet p-5">
-                    <div className="flex items-start justify-between gap-3">
+                  <article className="evidence-entry card-quiet p-5 md:p-6">
+                    <div className="entry-header grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                       <div className="min-w-0">
                         <p className="text-sm text-muted-foreground">{categoryLabels[e.category]} · {new Date(e.date + "T00:00").toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}</p>
                         <h2 className="mt-1 font-serif text-xl">{e.title}</h2>

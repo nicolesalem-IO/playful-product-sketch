@@ -14,6 +14,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Your daily practice for naming your strengths and letting them be seen." },
       { property: "og:title", content: "Own Your Presence | Warmth. Confidence. Recognition." },
       { property: "og:description", content: "Short coaching sessions for women navigating career transitions." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Today,
@@ -53,9 +55,9 @@ function Today() {
 
   return (
     <AppShell>
-      <div className="mb-8 animate-rise">
+      <div className="today-title mb-10 animate-rise">
         <p className="eyebrow mb-2">{greet}{state.profile.name ? `, ${state.profile.name}` : ""}</p>
-        <h1 className="text-4xl leading-tight text-primary md:text-5xl">{daysAway > 2 ? "Welcome back. You can begin with what matters today." : line}</h1>
+        <h1 className="max-w-xl text-3xl leading-tight text-primary md:text-5xl">{daysAway > 2 ? "Welcome back. You can begin with what matters today." : line}</h1>
       </div>
 
       {!state.onboarded && (
@@ -66,7 +68,7 @@ function Today() {
       )}
 
       {doneToday ? (
-        <section className="card-quiet p-6 md:p-8 animate-rise" aria-label="Today's completed practice">
+        <section className="completed-practice border-y py-8 animate-rise" aria-label="Today's completed practice">
           <div className="flex items-center gap-3 text-success">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold text-gold-foreground"><Check className="h-4 w-4" aria-hidden /></span>
             <span className="font-semibold">Today's practice is complete</span>
@@ -79,12 +81,12 @@ function Today() {
           </div>
         </section>
       ) : (
-        <section className="rounded-2xl bg-primary p-6 text-primary-foreground md:p-8 animate-rise" aria-label="Today's practice">
-          <p className="text-sm font-semibold uppercase tracking-wider opacity-80">{moduleById(featured.moduleId).title} · {minutes}</p>
-          <h2 className="mt-3 text-3xl leading-tight md:text-4xl">{featured.title}</h2>
-          <p className="mt-3 opacity-90">{featured.quick}</p>
+        <section className="practice-feature bg-primary p-6 text-primary-foreground md:p-9 animate-rise" aria-label="Today's practice">
+          <p className="text-sm font-semibold">{moduleById(featured.moduleId).title} · {minutes}</p>
+          <h2 className="mt-5 max-w-lg text-3xl leading-tight md:text-4xl">{featured.title}</h2>
+          <p className="mt-4 max-w-lg">{featured.quick}</p>
           <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-            <Link to="/session/$id" params={{ id: featured.id }} className="btn bg-primary-foreground text-primary hover:opacity-90">
+            <Link to="/session/$id" params={{ id: featured.id }} className="btn bg-gold text-gold-foreground hover:opacity-90">
               {state.progress[featured.id]?.draft ? "Continue today's practice" : "Begin today's practice"}
             </Link>
             <Link to="/path" className="btn text-primary-foreground underline-offset-4 hover:underline">Choose a different focus</Link>

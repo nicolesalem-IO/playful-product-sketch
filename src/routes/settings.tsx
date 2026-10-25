@@ -13,6 +13,8 @@ export const Route = createFileRoute("/settings")({
       { name: "description", content: "Manage your name, focus, session length, and personal data." },
       { property: "og:title", content: "Profile & settings | Own Your Presence" },
       { property: "og:description", content: "Manage your name, focus, session length, and personal data." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: SettingsPage,
@@ -153,8 +155,8 @@ function AccountGroup() {
 
 function Group({ title, children }: { title: string; children: import("react").ReactNode }) {
   return (
-    <section className="mb-10 border-b pb-10 last:border-0">
-      <h2 className="mb-4 text-2xl">{title}</h2>
+    <section className="settings-group mb-10 border-b pb-10 last:border-0">
+      <h2 className="mb-5 text-xl text-primary">{title}</h2>
       {children}
     </section>
   );

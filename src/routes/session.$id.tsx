@@ -19,6 +19,8 @@ export const Route = createFileRoute("/session/$id")({
         { name: "description", content: "A short coaching session: one idea, one reflection, one small practice." },
         { property: "og:title", content: t },
         { property: "og:description", content: "A short coaching session: one idea, one reflection, one small practice." },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
       ],
     };
   },
@@ -86,11 +88,11 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
   };
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between gap-3">
+    <div className="session-flow">
+      <div className="mb-8 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
         <button className="btn btn-ghost -ml-3 !min-h-10 !px-3" onClick={back}><ArrowLeft className="h-4 w-4" aria-hidden /> Back</button>
         {d.step !== "done" && (
-          <div className="flex rounded-full border bg-card p-1 text-sm" role="group" aria-label="Session length">
+          <div className="session-mode ml-auto flex rounded-full border bg-card p-1 text-sm" role="group" aria-label="Session length">
             {(["quick", "full"] as const).map((m) => (
               <button key={m} aria-pressed={d.mode === m}
                 className={`rounded-full px-3 py-1.5 ${d.mode === m ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
@@ -110,7 +112,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
         </div>
       )}
 
-      <section key={d.step} className="mt-8 animate-rise" aria-live="polite">
+      <section key={d.step} className="mt-10 animate-rise" aria-live="polite">
         {d.step === "idea" && (
           <Step title="Today's idea" h={headingRef}>
             <p className="text-lg leading-relaxed">{d.mode === "quick" && !deeper ? session.quick : session.lesson}</p>
