@@ -1,0 +1,9 @@
+# Netlify build settings. Lovable ignores this file and keeps building for its own hosting.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Build the server part of the app as a Netlify Function instead of Lovable's default target.
+  NITRO_PRESET = "netlify"
+  NODE_VERSION = "22"
