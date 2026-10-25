@@ -83,23 +83,23 @@ function Welcome() {
   if (step === 0) {
     return (
       <Frame>
-        <div className="flex min-h-[70vh] flex-col justify-center animate-rise">
-          <img src={heroImg} alt="Illustration of a calm, confident woman among leaves" width={1024} height={768} className="mb-8 aspect-[4/3] w-full max-w-md rounded-3xl object-cover" />
-          <p className="eyebrow mb-4 flex items-center gap-2"><Logo className="h-7 w-7" /> Own Your Presence</p>
+        <div className="welcome-intro flex flex-col animate-rise">
+          <img src={heroImg} alt="Illustration of a calm, confident woman among leaves" width={1024} height={768} className="welcome-image mb-7 w-full object-cover" />
+          <h1 className="welcome-brand mb-4 flex items-center gap-3 text-primary"><Logo className="h-10 w-10 shrink-0" /> Own Your Presence</h1>
           <p className="mb-3 inline-flex w-fit rounded-full bg-surface px-3.5 py-1.5 text-sm font-semibold text-primary">
             A career learning program for women
           </p>
-          <h1 className="text-4xl leading-tight text-primary md:text-6xl">You don't have to become someone else to be taken seriously.</h1>
-          <p className="mt-6 text-lg text-muted-foreground">
+          <h2 className="mt-2 text-2xl leading-snug text-primary md:text-3xl">You don't have to become someone else to be taken seriously.</h2>
+          <p className="mt-4 text-base text-muted-foreground">
             Whether you're returning to work, changing fields, or stepping into leadership, Own Your Presence helps you
             recognize your strengths, talk about your work with confidence, and ask for what you want.
           </p>
-          <ul className="mt-6 flex flex-wrap gap-2 text-sm text-primary" aria-label="How the program works">
+          <ul className="welcome-details mt-5 flex flex-wrap gap-3 text-sm text-primary" aria-label="How the program works">
             {["21 short sessions", "2–5 minutes a day", "At your own pace"].map((t) => (
-              <li key={t} className="rounded-full border border-primary/20 px-3 py-1">{t}</li>
+              <li key={t} className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-gold" aria-hidden />{t}</li>
             ))}
           </ul>
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
             <button className="btn btn-primary" onClick={() => go(1)}>Find my starting point</button>
             <button className="btn btn-ghost" onClick={explore}>Explore first</button>
           </div>
@@ -117,7 +117,7 @@ function Welcome() {
           <p className="mt-4 text-lg text-muted-foreground">
             Create a free account so your answers, evidence, and reflections are kept safe and follow you to any device.
           </p>
-          <div className="card-quiet mt-8 p-6">
+          <div className="mt-8 border-t pt-6">
             <AccountForm initialMode="create" onDone={() => go(SUMMARY)} />
           </div>
           <button className="btn btn-ghost mt-4 -ml-3" onClick={() => go(SUMMARY)}>Not now</button>
@@ -137,12 +137,12 @@ function Welcome() {
         <div className="animate-rise">
           <p className="eyebrow mb-3">{p.name ? `For you, ${p.name}` : "Your starting point"}</p>
           <h1 className="text-4xl text-primary md:text-5xl">Here's where we'll begin.</h1>
-          <div className="card-quiet mt-8 p-6">
+          <div className="mt-8 border-l-4 border-gold bg-surface p-6">
             <p className="text-sm text-muted-foreground">Your focus</p>
             <p className="font-serif text-2xl text-primary">{moduleById(p.focus).title}</p>
             <p className="mt-3">{explainFocus(p.focus, sel)}</p>
           </div>
-          <div className="card-quiet mt-4 p-6">
+          <div className="mt-4 border-b py-6">
             <p className="text-sm text-muted-foreground">Your first session</p>
             <p className="font-serif text-xl">{session.title}</p>
           </div>
@@ -276,7 +276,7 @@ function Welcome() {
 }
 
 function Frame({ children }: { children: ReactNode }) {
-  return <main className="mx-auto min-h-screen max-w-xl px-5 py-10 md:py-16">{children}</main>;
+  return <main className="welcome-frame mx-auto min-h-screen max-w-2xl px-5 py-6 md:px-10 md:py-10">{children}</main>;
 }
 
 function Choices({ options, selected, onToggle, max }: { options: { id: string; label: string }[]; selected: string[]; onToggle: (id: string) => void; max?: number }) {

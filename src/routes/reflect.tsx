@@ -71,11 +71,11 @@ function ReflectPage() {
 
       <section aria-label="Weekly reflection">
         {saved && <p className="mb-4 rounded-xl bg-surface p-4" role="status">Your reflection is saved below.</p>}
-        <div className="flex flex-col gap-5">
+        <div className="reflection-prompts flex flex-col gap-7">
           {prompts.map((p) => (
-            <label key={p.id} className="block">
+            <label key={p.id} className="block border-t pt-5">
               <span className="mb-2 block font-serif text-xl">{p.q}</span>
-              <textarea className="field min-h-24" value={answers[p.id] ?? ""} onChange={(e) => { setSaved(false); setAnswers({ ...answers, [p.id]: e.target.value }); }} />
+              <textarea className="field journal-field min-h-28" value={answers[p.id] ?? ""} onChange={(e) => { setSaved(false); setAnswers({ ...answers, [p.id]: e.target.value }); }} />
             </label>
           ))}
         </div>
@@ -92,12 +92,12 @@ function ReflectPage() {
           <section className="mt-12" aria-label="Saved reflections">
             <h2 className="mb-1 flex items-center gap-2 text-2xl"><NotebookPen className="h-6 w-6 text-primary" aria-hidden /> Your saved reflections</h2>
             <p className="mb-5 text-muted-foreground">{state.reflections.length} saved. Tap a theme to see only those answers.</p>
-            <div className="mb-6 rounded-2xl bg-panel-mint p-5">
+            <div className="mb-6 border-y py-6">
               <p className="mb-3 text-sm font-semibold">What you reflect on most</p>
               <ul className="flex flex-col gap-2">
                 {counts.map((c) => (
                   <li key={c.id}>
-                    <button className="w-full text-left" aria-pressed={filter === c.id} onClick={() => setFilter(filter === c.id ? null : c.id)}>
+                    <button className="reflection-trend min-h-11 w-full text-left" aria-pressed={filter === c.id} onClick={() => setFilter(filter === c.id ? null : c.id)}>
                       <span className={`block text-sm ${filter === c.id ? "font-bold text-primary" : ""}`}>{c.q}</span>
                       <span className="mt-1 flex items-center gap-2">
                         <span className="h-2.5 flex-1 overflow-hidden rounded-full bg-card"><span className="block h-full rounded-full bg-primary" style={{ width: `${(c.n / maxN) * 100}%` }} /></span>
@@ -140,7 +140,7 @@ function ReflectPage() {
 function Stat({ n, label }: { n: number; label: string }) {
   return (
     // Label first for screen readers; flex-col-reverse keeps the number on top visually.
-    <div className="card-quiet flex flex-col-reverse p-4">
+    <div className="flex flex-col-reverse border-l-2 border-gold px-3 py-2">
       <dt className="text-sm text-muted-foreground">{label}</dt>
       <dd className="font-serif text-3xl text-primary">{n}</dd>
     </div>

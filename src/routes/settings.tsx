@@ -153,8 +153,8 @@ function AccountGroup() {
 
 function Group({ title, children }: { title: string; children: import("react").ReactNode }) {
   return (
-    <section className="mb-10 border-b pb-10 last:border-0">
-      <h2 className="mb-4 text-2xl">{title}</h2>
+    <section className="settings-group mb-10 border-b pb-10 last:border-0">
+      <h2 className="mb-5 text-xl text-primary">{title}</h2>
       {children}
     </section>
   );

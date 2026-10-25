@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Shared visual roles and layout treatments live in `src/styles.css`; route markup uses semantic classes so visual changes remain separate from account, sync and curriculum logic.

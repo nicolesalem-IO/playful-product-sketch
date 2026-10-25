@@ -24,9 +24,9 @@ export function ProgressPanel() {
   const tried = state.actions.filter((a) => a.status === "yes" || a.status === "smaller").length;
 
   return (
-    <section className="mt-10 card-quiet p-6" aria-label="Your progress">
-      <div className="flex items-center justify-between">
-        <h2 className="flex items-center gap-2 text-2xl"><Sprout className="h-6 w-6 text-primary" aria-hidden /> Your progress</h2>
+    <section className="progress-panel mt-12 border-y py-8" aria-label="Your progress">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        <h2 className="flex min-w-0 items-center gap-2 text-xl"><Sprout className="h-5 w-5 shrink-0 text-primary" aria-hidden /> Your progress</h2>
         <Link to="/path" className="text-sm font-semibold text-primary underline-offset-4 hover:underline">See path</Link>
       </div>
       <div className="mt-4">
@@ -35,7 +35,7 @@ export function ProgressPanel() {
           <div className="h-full rounded-full bg-gold transition-all" style={{ width: `${pct}%` }} />
         </div>
       </div>
-      <div className="mt-5 grid grid-cols-3 gap-2 text-center">
+      <div className="mt-7 grid grid-cols-3 gap-2 text-center">
         <Mini icon={Footprints} n={tried} label="Practices tried" tone="bg-panel-mint" />
         <Mini icon={NotebookPen} n={state.reflections.length} label="Reflections" tone="bg-panel-blue" />
         <Mini icon={BookHeart} n={state.evidence.length} label="Evidence" tone="bg-panel-peach" />
@@ -55,7 +55,7 @@ export function ProgressPanel() {
 
 function Mini({ icon: Icon, n, label, tone }: { icon: typeof Sprout; n: number; label: string; tone: string }) {
   return (
-    <div className={`rounded-xl p-3 ${tone}`}>
+    <div className={`progress-stat rounded-lg px-2 py-4 ${tone}`}>
       <Icon className="mx-auto h-5 w-5 text-primary" aria-hidden />
       <p className="mt-1 text-2xl font-bold text-primary">{n}</p>
       <p className="text-xs text-muted-foreground">{label}</p>

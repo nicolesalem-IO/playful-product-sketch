@@ -41,13 +41,13 @@ function PathPage() {
         </a>
       </div>
 
-      <div id="modules" className="flex flex-col gap-5">
+      <div id="modules" className="module-list flex flex-col">
         {modules.map((m) => {
           const isFocus = state.profile.focus === m.id;
           return (
-            <section key={m.id} className={`card-quiet p-5 md:p-6 ${isFocus ? "border-primary" : ""}`} aria-labelledby={`mod-${m.id}`}>
-              <div className="flex items-start justify-between gap-3">
-                <div>
+            <section key={m.id} className={`module-section border-t py-7 ${isFocus ? "is-focus" : ""}`} aria-labelledby={`mod-${m.id}`}>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
+                <div className="min-w-0">
                   <p className="text-sm text-muted-foreground">Module {m.n}</p>
                   <h2 id={`mod-${m.id}`} className="text-2xl text-primary">{m.title}</h2>
                   <p className="mt-1 text-muted-foreground">{m.description}</p>
@@ -55,10 +55,10 @@ function PathPage() {
                 {isFocus ? (
                   <span className="shrink-0 rounded-full bg-surface px-3 py-1 text-sm font-semibold text-primary">Your focus</span>
                 ) : (
-                  <button className="btn btn-ghost !min-h-9 shrink-0 !px-3 text-sm" onClick={() => setFocus(m.id)}>Make this my focus</button>
+                  <button className="btn btn-ghost module-focus !min-h-9 shrink-0 !px-3 text-sm" onClick={() => setFocus(m.id)}>Make this my focus</button>
                 )}
               </div>
-              <ol className="mt-4 flex flex-col gap-1">
+              <ol className="mt-5 flex flex-col gap-1">
                 {sessionsInModule(m.id).map((s) => {
                   const complete = done.includes(s.id);
                   return (
