@@ -76,17 +76,6 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
   const actionText = { primary: session.action, smaller: session.smaller, alternative: session.alternative }[d.actionChoice];
   const planned = state.actions.find((a) => a.sessionId === session.id && a.status === "planned");
 
-  const commit = () => {
-    update((s) => ({
-      ...s,
-      actions: [
-        ...s.actions.filter((a) => !(a.sessionId === session.id && a.status === "planned")),
-        { id: uid(), sessionId: session.id, text: actionText, status: "planned", note: "", createdDate: localDate() },
-      ],
-    }));
-    next();
-  };
-
   const complete = () => {
     update((s) => ({
       ...s,
@@ -174,17 +163,13 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
 
         {d.step === "try" && (
           <Step title="Try this" h={headingRef}>
-            <div className="card-quiet p-6">
-              {d.actionChoice !== "primary" && <p className="mb-2 text-sm text-muted-foreground">{d.actionChoice === "smaller" ? "A smaller version" : "Another option"}</p>}
-              <p className="text-lg">{actionText}</p>
-            </div>
-            {planned && <p className="mt-3 text-sm text-muted-foreground">You already planned: “{planned.text}”. Choosing again will replace it.</p>}
-            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              <button className="btn btn-primary" onClick={commit}>I'll try this</button>
-              {d.actionChoice !== "smaller" && <button className="btn btn-secondary" onClick={() => set({ actionChoice: "smaller" })}>Make it smaller</button>}
-              <button className="btn btn-secondary" onClick={() => set({ actionChoice: d.actionChoice === "alternative" ? "primary" : "alternative" })}>Choose another action</button>
-              <button className="btn btn-ghost" onClick={next}>Not right now</button>
-            </div>
+            <TryStep
+              key={d.actionChoice}
+              session={session}
+              choice={d.actionChoice}
+              onChoose={(actionChoice) => set({ actionChoice })}
+              onNext={next}
+            />
           </Step>
         )}
 
@@ -216,7 +201,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
           <div className="text-center">
             <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-gold text-gold-foreground"><Check className="h-8 w-8" aria-hidden /></div>
             <h2 ref={headingRef} tabIndex={-1} className="text-3xl text-primary md:text-4xl">{session.completion}</h2>
-            <p className="mt-3 text-muted-foreground" role="status">Session complete.{planned ? " Your practice is saved as planned, and you can check in on it later." : ""}</p>
+            <p className="mt-3 text-muted-foreground" role="status">Session complete.{planned ? " Your practice is on your plan, on the Today page." : ""}</p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link to="/" className="btn btn-primary">Back to Today</Link>
               <Link to="/path" className="btn btn-secondary">See your path</Link>
@@ -224,6 +209,120 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
           </div>
         )}
       </section>
+    </div>
+  );
+}
+
+const choiceIndex = { primary: 0, smaller: 1, alternative: 2 } as const;
+type Choice = SessionDraft["actionChoice"];
+
+/**
+ * The practice for this session. What the button does depends on the practice:
+ * "write" is done right here and saved to My Evidence; "draft" and "out" happen
+ * in the person's day, so they go on their plan (with an optional draft) and
+ * Today asks how it went.
+ */
+function TryStep({ session, choice, onChoose, onNext }: { session: Session; choice: Choice; onChoose: (c: Choice) => void; onNext: () => void }) {
+  const { state, update } = useApp();
+  const kind = session.practice[choiceIndex[choice]];
+  const text = { primary: session.action, smaller: session.smaller, alternative: session.alternative }[choice];
+  const planned = state.actions.find((a) => a.sessionId === session.id && a.status === "planned");
+  const [words, setWords] = useState(planned && planned.text === text ? (planned.draft ?? "") : "");
+  const [due, setDue] = useState<"today" | "week">(planned?.due ?? "today");
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<"saved" | "planned" | null>(null);
+
+  const saveNow = () => {
+    const content = words.trim();
+    if (!content) return setError("Write a few words first, or choose another option below.");
+    const today = localDate();
+    update((s) => ({
+      ...s,
+      evidence: s.evidence.some((e) => e.sessionId === session.id && e.content.trim() === content)
+        ? s.evidence
+        : [{ id: uid(), title: session.title, content, category: "words", date: today, sessionId: session.id, favorite: false }, ...s.evidence],
+      actions: [
+        ...s.actions.filter((a) => !(a.sessionId === session.id && a.status === "planned")),
+        { id: uid(), sessionId: session.id, text, status: "yes", note: content, createdDate: today },
+      ],
+    }));
+    setResult("saved");
+  };
+
+  const addToPlan = () => {
+    const draft = words.trim();
+    update((s) => ({
+      ...s,
+      actions: [
+        ...s.actions.filter((a) => !(a.sessionId === session.id && a.status === "planned")),
+        { id: uid(), sessionId: session.id, text, status: "planned", note: "", createdDate: localDate(), due, ...(draft ? { draft } : {}) },
+      ],
+    }));
+    setResult("planned");
+  };
+
+  if (result) {
+    return (
+      <div className="animate-rise">
+        <div className="card-quiet flex items-start gap-4 p-6" role="status">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-gold-foreground"><Check className="h-5 w-5" aria-hidden /></span>
+          <div>
+            <p className="text-lg font-semibold">{result === "saved" ? "Saved to My Evidence" : `Added to your plan for ${due === "today" ? "today" : "this week"}`}</p>
+            <p className="mt-1 text-muted-foreground">
+              {result === "saved"
+                ? "You did this practice. You'll find your words in My Evidence whenever you need them."
+                : "It's on your Today page. When you've done it, tap it there to say how it went."}
+            </p>
+          </div>
+        </div>
+        <div className="mt-8"><button className="btn btn-primary" onClick={onNext}>Continue</button></div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="card-quiet p-6">
+        <p className="mb-2 text-sm font-semibold text-accent">
+          {kind === "write" ? "Do it now" : kind === "draft" ? "Prepare it here, then do it today or this week" : "Do this in your day"}
+          {choice !== "primary" && (choice === "smaller" ? " · A smaller version" : " · Another option")}
+        </p>
+        <p className="text-lg">{text}</p>
+      </div>
+      {planned && planned.text !== text && <p className="mt-3 text-sm text-muted-foreground">Already on your plan: “{planned.text}”. Adding this will replace it.</p>}
+
+      {kind !== "out" && (
+        <label className="mt-6 block">
+          <span className="mb-2 block font-semibold">
+            {kind === "write" ? "Write it here" : "Draft it here"}
+            {kind === "draft" && <span className="font-normal text-muted-foreground"> (optional, we'll keep it on your plan)</span>}
+          </span>
+          <textarea className="field min-h-28" value={words} onChange={(e) => { setWords(e.target.value); setError(""); }} />
+        </label>
+      )}
+      {error && <p className="mt-2 text-destructive" role="alert">{error}</p>}
+
+      {kind !== "write" && (
+        <fieldset className="mt-6">
+          <legend className="mb-2 font-semibold">When will you do it?</legend>
+          <div className="flex gap-2" role="radiogroup" aria-label="When">
+            {(["today", "week"] as const).map((w) => (
+              <button key={w} type="button" role="radio" aria-checked={due === w} className="chip !w-auto" onClick={() => setDue(w)}>
+                {w === "today" ? "Today" : "This week"}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+      )}
+
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        {kind === "write"
+          ? <button className="btn btn-primary" onClick={saveNow}>Save to My Evidence</button>
+          : <button className="btn btn-primary" onClick={addToPlan}>Add to my plan</button>}
+        {choice !== "smaller" && <button className="btn btn-secondary" onClick={() => onChoose("smaller")}>Make it smaller</button>}
+        <button className="btn btn-secondary" onClick={() => onChoose(choice === "alternative" ? "primary" : "alternative")}>Choose another action</button>
+        <button className="btn btn-ghost" onClick={onNext}>Not right now</button>
+      </div>
     </div>
   );
 }

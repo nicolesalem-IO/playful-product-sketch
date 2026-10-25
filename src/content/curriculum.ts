@@ -9,6 +9,8 @@
 export type ModuleId = "value" | "contribution" | "warmth" | "visible" | "connect" | "ask" | "grounded";
 export type Upcoming = "intro" | "networking" | "interview" | "difficult" | "request" | "none";
 
+export type PracticeKind = "write" | "draft" | "out";
+
 export interface CheckinResponses {
   comfortable: string;
   unfamiliar: string;
@@ -31,6 +33,9 @@ export interface Session {
   action: string;
   smaller: string;
   alternative: string;
+  /** How each version of the practice (main, smaller, alternative) is done:
+   *  "write" in the app now, "draft" here then do it in your day, or "out" in your day. */
+  practice: [PracticeKind, PracticeKind, PracticeKind];
   checkin: CheckinResponses;
   savePrompt: string;
   completion: string;
@@ -72,6 +77,7 @@ export const sessions: Session[] = [
     action: "Write one sentence about the reputation you want, and one thing you'll do this week that supports it.",
     smaller: "Write three words you'd like a colleague to use when describing you.",
     alternative: "Ask a trusted colleague what they would tell someone about working with you, and write down what they say.",
+    practice: ["write", "write", "out"],
     checkin: {
       comfortable: "Keep this sentence close. It helps you decide what's worth letting people see.",
       unfamiliar: "Thinking about how others see you can feel calculating at first. It's simply paying attention to how respect works.",
@@ -94,6 +100,7 @@ export const sessions: Session[] = [
     action: "Write one sentence in the form: \"I did ___, which meant ___.\"",
     smaller: "Write down one action and the person or team it helped.",
     alternative: "Think of a problem that no longer exists, and write down what you did to solve it.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "This is a pattern you can reuse in updates, reviews, and interviews.",
       unfamiliar: "Linking actions to results gets easier the more examples you collect.",
@@ -116,6 +123,7 @@ export const sessions: Session[] = [
     action: "Describe that strength in one sentence without mentioning your former title.",
     smaller: "Write three verbs that describe what you actually did in your last role.",
     alternative: "Write down a setting outside of work, such as volunteering, caregiving, or your community, where you used the same strength.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "This description travels well. Use it in introductions and conversations about what's next.",
       unfamiliar: "Translating your experience takes a few drafts. You can revise it as your direction gets clearer.",
@@ -139,6 +147,7 @@ export const sessions: Session[] = [
     action: "Write it in two parts: \"I ___. I'm grateful to ___ for ___.\" Then say it aloud.",
     smaller: "Finish this sentence privately: \"My part was…\"",
     alternative: "Recall a compliment about your work and write down the contribution that person noticed.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "Keep this example. It's what clear, generous credit sounds like.",
       unfamiliar: "New wording can feel odd even when it's accurate. Practice it privately before you use it.",
@@ -161,6 +170,7 @@ export const sessions: Session[] = [
     action: "The next time someone offers sincere praise, say \"Thank you\" and pause before adding anything.",
     smaller: "Say \"Thank you, I appreciate that\" aloud once today, on your own.",
     alternative: "Reread a kind message you've received about your work and write one sentence about what it got right.",
+    practice: ["out", "out", "write"],
     checkin: {
       comfortable: "That's a quiet, confident habit. It also makes it easier for people to praise you again.",
       unfamiliar: "The pause after a compliment can feel long. It's much shorter to the other person than it feels to you.",
@@ -183,6 +193,7 @@ export const sessions: Session[] = [
     action: "Write a one-sentence answer to \"How's it going?\" and use it the next time someone asks.",
     smaller: "Write the answer and say it aloud once.",
     alternative: "The next time you hear yourself say \"busy,\" add one specific sentence about what you're doing.",
+    practice: ["draft", "write", "out"],
     checkin: {
       comfortable: "A ready answer turns ordinary moments into openings. Refresh it whenever your work changes.",
       unfamiliar: "Sharing a real detail in small talk can feel like too much at first. Most people welcome it.",
@@ -206,6 +217,7 @@ export const sessions: Session[] = [
     action: "Name one thing you do that shows you care and one that shows you're capable.",
     smaller: "Write one behavior, either warm or capable, that you already do well.",
     alternative: "Think of someone you admire for being both, and write down one thing they do that you could adapt.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "You have a working example. Come back to it when you feel pulled to pick one side.",
       unfamiliar: "Seeing both qualities in yourself can take getting used to. They were there before you named them.",
@@ -228,6 +240,7 @@ export const sessions: Session[] = [
     action: "Make one specific, courteous request in a real conversation or message.",
     smaller: "Draft the specific version privately without sending it.",
     alternative: "Rewrite one vague sentence from a recent email and keep it for next time.",
+    practice: ["draft", "write", "write"],
     checkin: {
       comfortable: "Clear and kind is a combination people remember. Keep using it.",
       unfamiliar: "Directness can feel abrupt when you're used to cushioning. A warm tone does the cushioning for you.",
@@ -250,6 +263,7 @@ export const sessions: Session[] = [
     action: "Write a two-sentence introduction with one strength and one point of connection, and say it aloud.",
     smaller: "Write only the first sentence of your introduction.",
     alternative: "Write how a friend who admires your work would introduce you.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "This introduction is ready to use. Adjust it for each room.",
       unfamiliar: "Introductions get easier with repetition. Saying it aloud a few times helps it sound like you.",
@@ -273,6 +287,7 @@ export const sessions: Session[] = [
     action: "Share a short, factual update about your work with someone who should know.",
     smaller: "Draft the update in three sentences or fewer without sending it.",
     alternative: "Add the contribution to a running list you can draw from in your next one-on-one.",
+    practice: ["draft", "write", "write"],
     checkin: {
       comfortable: "Regular, factual updates build visibility without fanfare. Make it a habit.",
       unfamiliar: "Visibility can feel like self-promotion until you see it as information others need.",
@@ -295,6 +310,7 @@ export const sessions: Session[] = [
     action: "Offer one idea in a meeting, a chat thread, or a conversation.",
     smaller: "Write the idea as one sentence and share it with one person you trust.",
     alternative: "Ask one genuine question in your next meeting instead of offering an idea.",
+    practice: ["out", "draft", "out"],
     checkin: {
       comfortable: "Speaking early keeps you part of the conversation. Keep giving yourself that room.",
       unfamiliar: "Unfinished ideas feel exposed at first. Most people hear them as engagement.",
@@ -317,6 +333,7 @@ export const sessions: Session[] = [
     action: "Write and publish a short post about something you learned, finished, or admire in a colleague's work.",
     smaller: "Draft the post and save it without publishing.",
     alternative: "Congratulate someone publicly on their work or new role, with one specific sentence about why.",
+    practice: ["draft", "write", "draft"],
     checkin: {
       comfortable: "An occasional post keeps you in people's minds. Once or twice a month is plenty.",
       unfamiliar: "Posting about your work can feel exposed. Leading with what you learned, or with credit to others, keeps it generous.",
@@ -340,6 +357,7 @@ export const sessions: Session[] = [
     action: "Do one small favor: make an introduction, share a useful link, or answer a question you know well.",
     smaller: "Write down three people and one small thing you could offer each.",
     alternative: "Offer a skill others on your team find hard, such as a tool, a process, or social media know-how.",
+    practice: ["out", "write", "out"],
     checkin: {
       comfortable: "Keep a short list of people and ideas so this becomes a habit.",
       unfamiliar: "Offering help unprompted can feel forward. Keep it light and easy to ignore.",
@@ -362,6 +380,7 @@ export const sessions: Session[] = [
     action: "Send a short message to a former colleague: how you know each other, what you're doing now, and one question.",
     smaller: "Write the message and save it as a draft.",
     alternative: "Comment on or congratulate something they've shared online as an easy way back into contact.",
+    practice: ["draft", "write", "draft"],
     checkin: {
       comfortable: "A short, friendly note is easy to answer. Try one a month and watch your network come back to life.",
       unfamiliar: "Getting back in touch after a long gap can feel awkward. Most people are pleased to be remembered.",
@@ -384,6 +403,7 @@ export const sessions: Session[] = [
     action: "Tell one person where you're heading and what kind of opportunity you'd welcome.",
     smaller: "Write your one-sentence direction and keep it ready.",
     alternative: "Update your LinkedIn headline or About section to reflect what you're moving toward.",
+    practice: ["draft", "write", "draft"],
     checkin: {
       comfortable: "Saying your direction out loud makes it easier for others to remember it and help.",
       unfamiliar: "A direction can be tentative and still worth sharing. You can update it anytime.",
@@ -407,6 +427,7 @@ export const sessions: Session[] = [
     action: "Write the request in one plain sentence before adding any context.",
     smaller: "Finish this sentence privately: \"What I want is…\"",
     alternative: "Write down one thing you'd like help with this week, however small.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "A plain request is a strong start. Keep it close as you plan the conversation.",
       unfamiliar: "Saying what you want directly can feel exposed. The sentence can stay private until you're ready.",
@@ -429,6 +450,7 @@ export const sessions: Session[] = [
     action: "Write your request with one supporting fact, then rehearse it aloud and end with a pause.",
     smaller: "List two facts that support your request.",
     alternative: "Look through My Evidence and pick one entry that supports a future request.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "A grounded request is easy to hear. You're ready to practice it for real.",
       unfamiliar: "Silence after asking can feel tense. It's usually where the other person is genuinely considering it.",
@@ -451,6 +473,7 @@ export const sessions: Session[] = [
     action: "Ask one person, specifically, to mention your work to someone or at a moment that matters.",
     smaller: "Write down who you'd ask and the one sentence you'd like them to say.",
     alternative: "Speak up for a colleague first: tell their manager about something they did well.",
+    practice: ["draft", "write", "draft"],
     checkin: {
       comfortable: "A specific ask makes yes easy. Thank them afterward and keep them posted.",
       unfamiliar: "Asking someone to vouch for you can feel awkward. People who respect your work usually take it as a compliment.",
@@ -474,6 +497,7 @@ export const sessions: Session[] = [
     action: "Write two short lists: what actually happened, and what you've concluded from it.",
     smaller: "Write one fact and one interpretation.",
     alternative: "Tell a trusted person only the facts, and ask what they notice.",
+    practice: ["write", "write", "out"],
     checkin: {
       comfortable: "Sorting facts from stories is a steadying skill. Come back to it whenever you need it.",
       unfamiliar: "Interpretations often feel like facts at first. Noticing the difference is the work.",
@@ -496,6 +520,7 @@ export const sessions: Session[] = [
     action: "Choose the response that fits: keep practicing, gather information, find support, or set a boundary.",
     smaller: "Name which of the four the situation calls for, without deciding next steps yet.",
     alternative: "Write down one person or resource that could support you in this situation.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "You're using judgment, not just willpower. That's grounded confidence.",
       unfamiliar: "Telling discomfort apart from a real problem takes reflection. You don't have to get it perfect.",
@@ -518,6 +543,7 @@ export const sessions: Session[] = [
     action: "Save one example of your growth, then plan a week of small moves: a few new conversations, a few small favors, a few sincere compliments.",
     smaller: "Write one word that describes how you've changed.",
     alternative: "Look back through My Evidence and choose one entry that shows growth.",
+    practice: ["write", "write", "write"],
     checkin: {
       comfortable: "Recognizing your own growth is evidence too. Keep it close.",
       unfamiliar: "It can feel odd to give yourself credit for change. It still counts.",

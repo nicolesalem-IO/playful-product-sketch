@@ -5,7 +5,7 @@ import { AppShell, Loading } from "@/components/AppShell";
 import { ProgressPanel } from "@/components/ProgressPanel";
 import { moduleById, sessionById, upcomingOptions, type Upcoming } from "@/content/curriculum";
 import { nextSession, suggestForUpcoming } from "@/lib/recommend";
-import { useApp, completedIds, localDate, type ActionStatus } from "@/lib/store";
+import { useApp, completedIds, localDate, uid, type ActionStatus } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -47,7 +47,7 @@ function Today() {
   const greet = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   const line = lines[new Date().getDate() % lines.length];
   const preview = state.evidence.find((e) => e.favorite) ?? state.evidence[0];
-  const followUps = state.actions.filter((a) => a.status === "planned" && a.createdDate !== today && a.snoozedDate !== today).slice(0, 1);
+  const plan = state.actions.filter((a) => a.status === "planned" && a.snoozedDate !== today);
   const inProgress = Object.entries(state.progress).find(([, p]) => p.draft && !p.completedAt && p.draft.step !== "idea");
   const minutes = state.profile.rhythm === "quick" ? "About 2 minutes" : state.profile.rhythm === "deep" ? "About 5 minutes" : "2–5 minutes";
 
@@ -65,8 +65,6 @@ function Today() {
         </div>
       )}
 
-      {followUps.map((a) => <FollowUp key={a.id} id={a.id} />)}
-
       {doneToday ? (
         <section className="card-quiet p-6 md:p-8 animate-rise" aria-label="Today's completed practice">
           <div className="flex items-center gap-3 text-success">
@@ -75,10 +73,6 @@ function Today() {
           </div>
           <h2 className="mt-4 text-3xl text-primary">{doneToday.completion}</h2>
           <p className="mt-2 text-muted-foreground">{doneToday.title}</p>
-          {(() => {
-            const a = state.actions.find((x) => x.sessionId === doneToday.id && x.status === "planned");
-            return a ? <p className="mt-4 rounded-lg bg-surface p-4"><span className="text-sm text-muted-foreground">Planned practice · </span>{a.text}</p> : null;
-          })()}
           <div className="mt-6 flex flex-col gap-2 sm:flex-row">
             <Link to="/session/$id" params={{ id: doneToday.id }} className="btn btn-secondary">Revisit this session</Link>
             <Link to="/session/$id" params={{ id: featured.id }} className="btn btn-ghost">Try another: {featured.title}</Link>
@@ -97,6 +91,8 @@ function Today() {
           </div>
         </section>
       )}
+
+      {plan.length > 0 && <YourPlan ids={plan.map((a) => a.id)} />}
 
       {inProgress && inProgress[0] !== featured.id && (
         <p className="mt-4 text-muted-foreground">
@@ -155,66 +151,101 @@ function Upcoming() {
   );
 }
 
-function FollowUp({ id }: { id: string }) {
+function YourPlan({ ids }: { ids: string[] }) {
+  const [all, setAll] = useState(false);
+  const shown = all ? ids : ids.slice(0, 3);
+  return (
+    <section className="mt-8" aria-labelledby="plan-heading">
+      <h2 id="plan-heading" className="text-2xl">Your plan</h2>
+      <p className="mb-4 text-muted-foreground">Practices you've chosen to try in your day. Check in when you've done one.</p>
+      <ul className="flex flex-col gap-3">
+        {shown.map((id) => <li key={id}><PlanItem id={id} /></li>)}
+      </ul>
+      {ids.length > 3 && (
+        <button className="btn btn-ghost mt-2 -ml-3" onClick={() => setAll(!all)}>{all ? "Show fewer" : `Show all ${ids.length}`}</button>
+      )}
+    </section>
+  );
+}
+
+function PlanItem({ id }: { id: string }) {
   const { state, update } = useApp();
-  const a = state.actions.find((x) => x.id === id)!;
+  const a = state.actions.find((x) => x.id === id);
   const [stage, setStage] = useState<"ask" | "note" | "notyet" | "thanks">("ask");
+  const [pending, setPending] = useState<ActionStatus>("yes");
   const [note, setNote] = useState("");
+  const [copied, setCopied] = useState(false);
+  if (!a) return null;
   const set = (patch: Partial<typeof a>) => update((s) => ({ ...s, actions: s.actions.map((x) => (x.id === id ? { ...x, ...patch } : x)) }));
   const session = sessionById(a.sessionId);
-  const answer = (st: ActionStatus) => {
-    if (st === "yes" || st === "smaller") { setStage("note"); setPending(st); }
-    else { set({ status: st }); setStage("thanks"); }
-  };
-  const [pending, setPending] = useState<ActionStatus>("yes");
+  const today = localDate();
+  const when = a.due === "week" ? "This week" : a.createdDate === today ? "Today" : "Still open";
 
-  if (stage === "thanks") return <div className="mb-6 rounded-xl bg-surface p-5" role="status">Thanks for checking in. Your judgment about what fits is part of the practice.</div>;
+  if (stage === "thanks") {
+    return <div className="rounded-xl bg-surface p-5" role="status">Thanks for checking in. Your judgment about what fits is part of the practice.</div>;
+  }
+
+  const copy = async () => {
+    try { await navigator.clipboard.writeText(a.draft ?? ""); setCopied(true); setTimeout(() => setCopied(false), 2000); } catch { /* clipboard blocked */ }
+  };
 
   return (
-    <section className="mb-6 card-quiet p-5" aria-label="Practice check-in">
+    <article className="card-quiet p-5" aria-label={`Planned practice: ${a.text}`}>
       <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm text-muted-foreground">From “{session?.title}”</p>
-          <p className="mt-1 font-semibold">{a.text}</p>
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground">
+            <span className="mr-2 rounded-full bg-gold px-2 py-0.5 text-xs font-bold text-gold-foreground">{when}</span>
+            From “{session?.title}”
+          </p>
+          <p className="mt-2 font-semibold">{a.text}</p>
         </div>
-        <button className="btn btn-ghost !min-h-9 !px-3 text-sm" onClick={() => set({ snoozedDate: localDate() })}>Dismiss</button>
       </div>
-      {stage === "ask" && (
-        <>
-          <p className="mt-4">Did you get a chance to try this?</p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <button className="btn btn-secondary !min-h-10" onClick={() => answer("yes")}>Yes</button>
-            <button className="btn btn-secondary !min-h-10" onClick={() => answer("smaller")}>I tried a smaller version</button>
-            <button className="btn btn-secondary !min-h-10" onClick={() => setStage("notyet")}>Not yet</button>
-            <button className="btn btn-secondary !min-h-10" onClick={() => answer("notright")}>I decided it wasn't right for me</button>
+
+      {a.draft && (
+        <div className="mt-3 rounded-lg bg-surface p-4">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm font-semibold text-muted-foreground">Your draft</p>
+            <button className="btn btn-ghost !min-h-9 !px-3 text-sm" onClick={copy}>{copied ? "Copied" : "Copy"}</button>
           </div>
-        </>
+          <p className="mt-1 whitespace-pre-wrap">{a.draft}</p>
+        </div>
       )}
+
+      {stage === "ask" && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button className="btn btn-primary !min-h-10" onClick={() => { setPending("yes"); setStage("note"); }}>I did it</button>
+          <button className="btn btn-secondary !min-h-10" onClick={() => { setPending("smaller"); setStage("note"); }}>I did a smaller version</button>
+          <button className="btn btn-secondary !min-h-10" onClick={() => setStage("notyet")}>Not yet</button>
+        </div>
+      )}
+
       {stage === "note" && (
         <div className="mt-4">
-          <label htmlFor={`note-${id}`} className="block">What did you notice? <span className="text-muted-foreground">(optional)</span></label>
+          <label htmlFor={`note-${id}`} className="block">How did it go? <span className="text-muted-foreground">(optional)</span></label>
           <textarea id={`note-${id}`} className="field mt-2 min-h-24" value={note} onChange={(e) => setNote(e.target.value)} />
           <button className="btn btn-primary mt-3" onClick={() => {
             update((s) => ({
               ...s,
               actions: s.actions.map((x) => (x.id === id ? { ...x, status: pending, note } : x)),
-              evidence: [{ id: crypto.randomUUID(), title: pending === "smaller" ? "Tried a smaller version" : "Tried a practice", content: a.text + (note.trim() ? `\n\nWhat I noticed: ${note.trim()}` : ""), category: "actions", date: localDate(), sessionId: a.sessionId, favorite: false }, ...s.evidence],
+              evidence: [{ id: uid(), title: pending === "smaller" ? "Did a smaller version" : "Did a practice", content: a.text + (note.trim() ? `\n\nHow it went: ${note.trim()}` : ""), category: "actions", date: today, sessionId: a.sessionId, favorite: false }, ...s.evidence],
             }));
             setStage("thanks");
           }}>Save</button>
           <p className="mt-2 text-sm text-muted-foreground">This will be added to “Actions I took.”</p>
         </div>
       )}
+
       {stage === "notyet" && (
         <div className="mt-4">
-          <p>You can keep it, make it smaller, or let it go.</p>
+          <p>You can keep it on your plan, make it smaller, or let it go.</p>
           <div className="mt-3 flex flex-wrap gap-2">
-            <button className="btn btn-secondary !min-h-10" onClick={() => { set({ snoozedDate: localDate() }); }}>Keep it</button>
-            {session && <button className="btn btn-secondary !min-h-10" onClick={() => { set({ text: session.smaller, snoozedDate: localDate() }); }}>Make it smaller</button>}
-            <button className="btn btn-secondary !min-h-10" onClick={() => { set({ status: "dismissed" }); setStage("thanks"); }}>Let it go</button>
+            <button className="btn btn-secondary !min-h-10" onClick={() => set({ snoozedDate: today })}>Keep it for later</button>
+            {session && <button className="btn btn-secondary !min-h-10" onClick={() => { set({ text: session.smaller }); setStage("ask"); }}>Make it smaller</button>}
+            <button className="btn btn-secondary !min-h-10" onClick={() => { set({ status: "notright" }); setStage("thanks"); }}>It isn't right for me</button>
+            <button className="btn btn-ghost !min-h-10" onClick={() => { set({ status: "dismissed" }); setStage("thanks"); }}>Let it go</button>
           </div>
         </div>
       )}
-    </section>
+    </article>
   );
 }

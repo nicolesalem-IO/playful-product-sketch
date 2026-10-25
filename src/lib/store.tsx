@@ -46,6 +46,8 @@ export interface SessionProgress { draft?: SessionDraft; completedAt?: string }
 export interface PlannedAction {
   id: string; sessionId: string; text: string; status: ActionStatus;
   note: string; createdDate: string; snoozedDate?: string;
+  /** When they plan to do it, and any message they drafted for it. */
+  due?: "today" | "week"; draft?: string;
 }
 
 export interface Evidence {
