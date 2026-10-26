@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Check, ArrowRight } from "lucide-react";
 import { AppShell, PageTitle, Loading } from "@/components/AppShell";
+import { ModuleArt } from "@/components/ModuleArt";
 import { modules, sessionsInModule, moduleById, type ModuleId } from "@/content/curriculum";
 import { nextSession } from "@/lib/recommend";
 import { useApp, completedIds } from "@/lib/store";
@@ -48,6 +49,7 @@ function PathPage() {
           const isFocus = state.profile.focus === m.id;
           return (
             <section key={m.id} className={`module-section border-t py-7 ${isFocus ? "is-focus" : ""}`} aria-labelledby={`mod-${m.id}`}>
+              <ModuleArt id={m.id} className="module-art mb-5 block aspect-[16/6] w-full" />
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
                 <div className="min-w-0">
                   <p className="text-sm text-muted-foreground">Module {m.n}</p>

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { sessionById, moduleById, type Session } from "@/content/curriculum";
 import { AppShell, Loading } from "@/components/AppShell";
+import { ModuleArt } from "@/components/ModuleArt";
 import { useApp, localDate, uid, categoryLabels, type Checkin, type EvidenceCategory, type SessionDraft } from "@/lib/store";
 
 export const Route = createFileRoute("/session/$id")({
@@ -90,7 +91,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
   return (
     <div className="session-flow">
       <div className="mb-8 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3">
-        <button className="btn btn-ghost -ml-3 !min-h-10 !px-3" onClick={back}><ArrowLeft className="h-4 w-4" aria-hidden /> Back</button>
+        <button className="btn btn-ghost -ml-3 !min-h-10 !px-3" onClick={back}><ArrowLeft className="h-4 w-4 shrink-0" aria-hidden /> Back</button>
         {d.step !== "done" && (
           <div className="session-mode ml-auto flex rounded-full border bg-card p-1 text-sm" role="group" aria-label="Session length">
             {(["quick", "full"] as const).map((m) => (
@@ -114,6 +115,8 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
 
       <section key={d.step} className="mt-10 animate-rise" aria-live="polite">
         {d.step === "idea" && (
+          <>
+          <ModuleArt id={session.moduleId} className="lesson-art mb-8 block aspect-[16/9] w-full" />
           <Step title="Today's idea" h={headingRef}>
             <p className="text-lg leading-relaxed">{d.mode === "quick" && !deeper ? session.quick : session.lesson}</p>
             {d.mode === "quick" && (
@@ -123,6 +126,7 @@ function Flow({ session, rhythm }: { session: Session; rhythm: string }) {
             )}
             <Nav onNext={next} />
           </Step>
+          </>
         )}
 
         {d.step === "example" && (

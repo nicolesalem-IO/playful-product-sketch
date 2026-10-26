@@ -255,7 +255,7 @@ function Welcome() {
     <Frame>
       <div className="mb-8">
         <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <button className="btn btn-ghost -ml-3 !min-h-10 !px-3" onClick={() => go(step - 1)}><ArrowLeft className="h-4 w-4" aria-hidden /> Back</button>
+          <button className="btn btn-ghost -ml-3 !min-h-10 !px-3" onClick={() => go(step - 1)}><ArrowLeft className="h-4 w-4 shrink-0" aria-hidden /> Back</button>
           <span aria-live="polite">Step {step} of {TOTAL}</span>
         </div>
         <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-surface" role="progressbar" aria-valuemin={0} aria-valuemax={TOTAL} aria-valuenow={step} aria-label="Onboarding progress">

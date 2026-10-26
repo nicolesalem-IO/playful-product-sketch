@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Check, Star } from "lucide-react";
 import { AppShell, Loading } from "@/components/AppShell";
 import { ProgressPanel } from "@/components/ProgressPanel";
+import { ModuleArt } from "@/components/ModuleArt";
 import { moduleById, sessionById, upcomingOptions, type Upcoming } from "@/content/curriculum";
 import { nextSession, suggestForUpcoming } from "@/lib/recommend";
 import { useApp, completedIds, localDate, uid, type ActionStatus } from "@/lib/store";
@@ -81,7 +82,9 @@ function Today() {
           </div>
         </section>
       ) : (
-        <section className="practice-feature bg-primary p-6 text-primary-foreground md:p-9 animate-rise" aria-label="Today's practice">
+        <section className="practice-feature overflow-hidden bg-primary text-primary-foreground animate-rise" aria-label="Today's practice">
+          <ModuleArt id={featured.moduleId} className="block aspect-[16/6] w-full" />
+          <div className="p-6 md:p-9">
           <p className="text-sm font-semibold">{moduleById(featured.moduleId).title} · {minutes}</p>
           <h2 className="mt-5 max-w-lg text-3xl leading-tight md:text-4xl">{featured.title}</h2>
           <p className="mt-4 max-w-lg">{featured.quick}</p>
@@ -90,6 +93,7 @@ function Today() {
               {state.progress[featured.id]?.draft ? "Continue today's practice" : "Begin today's practice"}
             </Link>
             <Link to="/path" className="btn text-primary-foreground underline-offset-4 hover:underline">Choose a different focus</Link>
+          </div>
           </div>
         </section>
       )}

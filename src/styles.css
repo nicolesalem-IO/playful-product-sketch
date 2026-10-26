@@ -186,6 +186,7 @@
 .module-section ol li + li { border-top: 1px solid var(--border); }
 .module-section ol a { padding-top: 0.75rem; padding-bottom: 0.75rem; }
 .session-flow { max-width: 640px; margin-inline: auto; }
+.lesson-art, .module-art { border-radius: var(--radius); }
 .session-flow > section { padding-top: 0.5rem; }
 .session-flow .eyebrow { margin-bottom: 0.75rem; }
 .session-mode button { min-height: 2.5rem; white-space: nowrap; }
