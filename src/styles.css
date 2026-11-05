@@ -46,41 +46,43 @@
 }
 
 :root {
-  /* Paper, deep green, and gold. Flat colors only: no gradients. */
+  /* Sunny yellow to orchid, with ink-black buttons and type (Sweatpals-inspired). */
   --radius: 0.5rem;
-  --background: #F7F3EA;
-  --foreground: #22211D;
+  --background: #FFF9F0;
+  --foreground: #141414;
   --card: #FFFFFF;
   --card-foreground: #22211D;
   --popover: #FFFFFF;
   --popover-foreground: #22211D;
-  --primary: #0E5647;
+  --primary: #141414;
   --primary-foreground: #FFFFFF;
-  --primary-soft: #1B6B59;
+  --primary-soft: #333333;
   /* Gold: bright for fills (stars, badges, progress), deep for small text. */
-  --gold: #E2B23C;
-  --gold-foreground: #3D2C05;
-  --accent: #7A5A0F;
+  --gold: #FFD93D;
+  --gold-foreground: #141414;
+  --accent: #A0359E;
   --accent-foreground: #FFFFFF;
   /* Quiet tints in the same family, for selected states and panels. */
-  --mint: #E3EEE8;
-  --mint-dim: #B9D3C7;
-  --panel-mint: #E7EFE9;
-  --panel-blue: #EFE9DC;
-  --panel-peach: #F7ECD0;
-  --secondary: #F2EDE2;
-  --secondary-foreground: #0E5647;
-  --surface: #EFE9DC;
-  --muted: #F2EDE2;
+  --mint: #F6E2F7;
+  --mint-dim: #E7B8EA;
+  --panel-mint: #FDF1C7;
+  --panel-blue: #F6E2F7;
+  --panel-peach: #FFE1D2;
+  --secondary: #F7EEE6;
+  --secondary-foreground: #141414;
+  --surface: #F7EEE6;
+  --muted: #F7EEE6;
   --muted-foreground: #4A4740;
   --hint: #6E6A60;
-  --success: #2D7A5D;
+  --success: #1E7A4E;
   --success-foreground: #FFFFFF;
   --destructive: #B3261E;
   --destructive-foreground: #FFFFFF;
-  --border: #E5DED0;
-  --input: #DCD4C4;
-  --ring: #1B6B59;
+  --border: #EEE2D6;
+  --input: #E2D3C4;
+  --ring: #A0359E;
+  --gradient-hero: linear-gradient(120deg, #FFD93D 0%, #F6A87A 45%, #D97BE0 100%);
+  --gradient-soft: linear-gradient(120deg, #FFF3C4 0%, #FFE1D2 50%, #F6E2F7 100%);
   --shadow-card: 0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
   --shadow-button: 0 2px 0 color-mix(in srgb, var(--foreground) 12%, transparent);
 }
@@ -171,8 +173,12 @@
 .mobile-nav a[data-status="active"] svg { stroke-width: 2.5; }
 .page-title, .today-title { padding-bottom: 0.5rem; }
 .page-title > .eyebrow, .today-title > .eyebrow { margin-bottom: 1rem; }
-.practice-feature { position: relative; border-radius: var(--radius); border-top: 4px solid var(--gold); }
-.practice-feature h2 { color: var(--primary-foreground); }
+.practice-feature { position: relative; border-radius: 1.25rem; background: var(--gradient-hero) !important; color: var(--foreground) !important; }
+.practice-feature h2, .practice-feature p, .practice-feature a.text-primary-foreground { color: var(--foreground) !important; }
+.practice-feature img { border-radius: 1.25rem 1.25rem 0 0; }
+.practice-feature .bg-gold { background: var(--primary); color: var(--primary-foreground); }
+.today-title, .page-title { background: var(--gradient-soft); border-radius: 1.25rem; padding: 1.5rem; }
+.today-title h1 { color: var(--foreground); font-weight: 800; }
 .progress-stat { background: transparent; }
 .progress-stat + .progress-stat { border-left: 1px solid var(--border); border-radius: 0; }
 .progress-stat > svg { margin-bottom: 0.5rem; }
