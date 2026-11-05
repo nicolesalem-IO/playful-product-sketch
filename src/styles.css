@@ -48,41 +48,41 @@
 :root {
   /* Sunny yellow to orchid, with ink-black buttons and type (Sweatpals-inspired). */
   --radius: 0.5rem;
-  --background: #FFF9F0;
-  --foreground: #141414;
-  --card: #FFFFFF;
-  --card-foreground: #22211D;
-  --popover: #FFFFFF;
-  --popover-foreground: #22211D;
-  --primary: #141414;
-  --primary-foreground: #FFFFFF;
-  --primary-soft: #333333;
+  --background: #121014;
+  --foreground: #F7F2EC;
+  --card: #1D1A21;
+  --card-foreground: #F7F2EC;
+  --popover: #1D1A21;
+  --popover-foreground: #F7F2EC;
+  --primary: #FFD93D;
+  --primary-foreground: #141414;
+  --primary-soft: #FFE57A;
   /* Gold: bright for fills (stars, badges, progress), deep for small text. */
   --gold: #FFD93D;
   --gold-foreground: #141414;
-  --accent: #A0359E;
-  --accent-foreground: #FFFFFF;
+  --accent: #E89BEB;
+  --accent-foreground: #141414;
   /* Quiet tints in the same family, for selected states and panels. */
-  --mint: #F6E2F7;
-  --mint-dim: #E7B8EA;
-  --panel-mint: #FDF1C7;
-  --panel-blue: #F6E2F7;
-  --panel-peach: #FFE1D2;
-  --secondary: #F7EEE6;
-  --secondary-foreground: #141414;
-  --surface: #F7EEE6;
-  --muted: #F7EEE6;
-  --muted-foreground: #4A4740;
-  --hint: #6E6A60;
-  --success: #1E7A4E;
-  --success-foreground: #FFFFFF;
-  --destructive: #B3261E;
+  --mint: #3A2440;
+  --mint-dim: #6B3F72;
+  --panel-mint: #2A2620;
+  --panel-blue: #2A2130;
+  --panel-peach: #2E2320;
+  --secondary: #26222B;
+  --secondary-foreground: #FFD93D;
+  --surface: #26222B;
+  --muted: #26222B;
+  --muted-foreground: #C9C1BA;
+  --hint: #9A928B;
+  --success: #6FD49B;
+  --success-foreground: #141414;
+  --destructive: #FF6B5E;
   --destructive-foreground: #FFFFFF;
-  --border: #EEE2D6;
-  --input: #E2D3C4;
-  --ring: #A0359E;
+  --border: #2F2A35;
+  --input: #403946;
+  --ring: #E89BEB;
   --gradient-hero: linear-gradient(120deg, #FFD93D 0%, #F6A87A 45%, #D97BE0 100%);
-  --gradient-soft: linear-gradient(120deg, #FFF3C4 0%, #FFE1D2 50%, #F6E2F7 100%);
+  --gradient-soft: linear-gradient(120deg, #3A3018 0%, #3A2420 50%, #3A2440 100%);
   --shadow-card: 0 2px 8px color-mix(in srgb, var(--foreground) 4%, transparent);
   --shadow-button: 0 2px 0 color-mix(in srgb, var(--foreground) 12%, transparent);
 }
@@ -174,9 +174,9 @@
 .page-title, .today-title { padding-bottom: 0.5rem; }
 .page-title > .eyebrow, .today-title > .eyebrow { margin-bottom: 1rem; }
 .practice-feature { position: relative; border-radius: 1.25rem; background: var(--gradient-hero) !important; color: var(--foreground) !important; }
-.practice-feature h2, .practice-feature p, .practice-feature a.text-primary-foreground { color: var(--foreground) !important; }
+.practice-feature, .practice-feature h2, .practice-feature p, .practice-feature a.text-primary-foreground { color: #141414 !important; }
 .practice-feature img { border-radius: 1.25rem 1.25rem 0 0; }
-.practice-feature .bg-gold { background: var(--primary); color: var(--primary-foreground); }
+.practice-feature .bg-gold { background: #141414; color: #FFFFFF; }
 .today-title, .page-title { background: var(--gradient-soft); border-radius: 1.25rem; padding: 1.5rem; }
 .today-title h1 { color: var(--foreground); font-weight: 800; }
 .progress-stat { background: transparent; }
